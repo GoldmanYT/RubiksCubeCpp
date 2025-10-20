@@ -1,7 +1,29 @@
 #pragma once
 
+#include <array>
+#include <iostream>
+#include <memory>
+#include <vector>
+
+#include <raylib.h>
+#include <raymath.h>
+
+using namespace std;
+
+// Частота обновления кадров
+extern const int FPS;
+
+// Ширина окна
+extern const int WINDOW_WIDTH;
+
+// Высота окна
+extern const int WINDOW_HEIGHT;
+
 // Размер кубика Рубика по умолчанию
-const int DEFAULT_SIZE = 3;
+extern const int DEFAULT_SIZE;
+
+// Используемая камера
+extern Camera camera;
 
 // Количество сторон куба
 const int SIDE_COUNT = 6;
@@ -15,12 +37,12 @@ enum CubePlane {
 
 // Перечисление всех цветок кубика Рубика
 enum StickerColor {
-    WHITE,
-    GREEN,
-    RED,
-    YELLOW,
-    BLUE,
-    ORANGE
+    STICKER_WHITE,
+    STICKER_GREEN,
+    STICKER_RED,
+    STICKER_YELLOW,
+    STICKER_BLUE,
+    STICKER_ORANGE
 };
 
 // Информация, необходимая для вращения грани
@@ -46,3 +68,39 @@ extern RotationData ROTATION_SIDES[3];
 //  ROTATION_SIDE[plane][0] - грань, если выбран index = 0
 //  ROTATION_SIDE[plane][1] - грань, если выбран index = size - 1
 extern int ROTATION_SIDE[3][2];
+
+// Цвета, используемые для материалов
+extern array<Color, SIDE_COUNT + 2> colors;
+
+// Маленький зазор (между кусочком и стикером)
+extern const float TINY_OFFSET;
+
+// Размер меша стикера
+extern float STICKER_SIZE;
+
+// Меш для стикера
+extern Mesh stickerMesh;
+
+extern float PIECE_SIZE;
+
+// Индекс материала куба из массива материалов
+extern const int CUBE_MATERIAL;
+
+extern Mesh pieceMesh;
+
+// Материалы стикеров и самого кубика
+extern vector<Material> materials;
+
+// Индекс материала выбранной "полоски"
+extern const int SELECTED_ROW_MATERIAL;
+
+// Меш выбранной "полоски"
+extern Mesh selectedRowMesh;
+
+// Количество зазоров между кусочками и выбранной "полоской"
+extern int COUNT_MARGINS;
+
+// ------------ Функции ---------------
+
+// Функция, инициализирующая все данные
+void initData();

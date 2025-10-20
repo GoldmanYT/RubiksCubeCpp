@@ -2,7 +2,7 @@
 
 RubiksCube::RubiksCube()
 {
-    reset(3);
+    reset(DEFAULT_SIZE);
 }
 
 RubiksCube::RubiksCube(int size)

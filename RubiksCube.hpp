@@ -1,11 +1,6 @@
 #pragma once
 
-#include <array>
-#include <vector>
-
 #include "Data.hpp"
-
-using namespace std;
 
 // Класс для представления кубика Рубика
 class RubiksCube {
@@ -17,7 +12,7 @@ public:
     RubiksCube(int size);
 
     // Метод, возвращающий куб в исходное положение
-    void reset(int size = 3);
+    void reset(int size = DEFAULT_SIZE);
 
     // Метод, реализующий ращение грани
     //  plane: ось вращения грани
@@ -32,6 +27,9 @@ public:
     array<vector<vector<StickerColor>>, SIDE_COUNT>& getStickers();
 
 private:
+    // Размер кубика Рубика
     int size;
+
+    // Логическое представление стикеров кубика
     array<vector<vector<StickerColor>>, SIDE_COUNT> stickers;
 };
