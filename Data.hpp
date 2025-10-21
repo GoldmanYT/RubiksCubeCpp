@@ -10,9 +10,6 @@
 
 using namespace std;
 
-// Частота обновления кадров
-extern const int FPS;
-
 // Ширина окна
 extern const int WINDOW_WIDTH;
 

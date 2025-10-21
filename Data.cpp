@@ -1,7 +1,5 @@
 #include "Data.hpp"
 
-const int FPS = 60;
-
 const int WINDOW_WIDTH = 800;
 
 const int WINDOW_HEIGHT = 600;
@@ -54,5 +52,11 @@ void initData()
     stickerMesh = GenMeshPlane(STICKER_SIZE, STICKER_SIZE, 1, 1);
     pieceMesh = GenMeshCube(PIECE_SIZE, PIECE_SIZE, PIECE_SIZE);
     selectedRowMesh = GenMeshCube(1.0f, 1.0f, 1.0f);
-    camera = Camera { { 10, 10, 10 }, { 0, 0, 0 }, { 0, 1, 0 }, 5, CAMERA_ORTHOGRAPHIC };
+    camera = Camera {
+        { DEFAULT_SIZE * 3.0f, DEFAULT_SIZE * 3.0f, DEFAULT_SIZE * 3.0f },
+        { 0.0f, 0.0f, 0.0f },
+        { 0.0f, 1.0f, 0.0f },
+        DEFAULT_SIZE * 2.0f,
+        CAMERA_ORTHOGRAPHIC
+    };
 }

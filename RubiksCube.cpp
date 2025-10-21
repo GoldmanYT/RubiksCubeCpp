@@ -43,9 +43,9 @@ void RubiksCube::rotate(CubePlane plane, int rowIndex, bool direction)
             for (int y = 0; y < size / 2; ++y) {
                 pair<int, int> indexes[4] = {
                     { x, y },
-                    { y, size - x - 1 },
+                    { size - y - 1, x },
                     { size - x - 1, size - y - 1 },
-                    { size - y - 1, x }
+                    { y, size - x - 1 }
                 };
                 temp = stickers[side][x][y];
 

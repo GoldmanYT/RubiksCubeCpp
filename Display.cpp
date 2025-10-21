@@ -21,7 +21,6 @@ void init()
 {
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "");
     SetWindowState(FLAG_WINDOW_RESIZABLE);
-    SetTargetFPS(FPS);
 
     initData();
     setHotkeys();
@@ -37,7 +36,7 @@ void mainloop()
 
 void setHotkeys()
 {
-    for (int key = 0; key <= 336; ++key) {
+    for (int key = 0; key <= 348; ++key) {
         keyboardCallbacks.push_back(
             KeyboardCallback { key, key, logKeyboardPress });
     }
@@ -52,8 +51,9 @@ void setHotkeys()
     keyboardCallbacks.push_back(KeyboardCallback { KEY_D, YOZ, selectPlane });
     keyboardCallbacks.push_back(KeyboardCallback { KEY_A, ZOX, selectPlane });
 
-    for (int key = KEY_ONE; key <= KEY_NINE; ++key) {
-        keyboardCallbacks.push_back(KeyboardCallback { key, key - KEY_ONE, selectRowIndex });
+    for (int key = 0; key < 9; ++key) {
+        keyboardCallbacks.push_back(KeyboardCallback { key + KEY_ONE, key, selectRowIndex });
+        keyboardCallbacks.push_back(KeyboardCallback { key + KEY_KP_1, key, selectRowIndex });
     }
 
     keyboardCallbacks.push_back(KeyboardCallback { KEY_SPACE, true, rotate });

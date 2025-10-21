@@ -37,7 +37,7 @@ public:
     bool animationDirection;
 
     // Скорость анимации
-    const float ANIMATION_SPEED = 5.0f;
+    const float ANIMATION_SPEED = 200.0f;
 
     // Минимальная прозрачность
     const float MIN_ALPHA = 0.0f;

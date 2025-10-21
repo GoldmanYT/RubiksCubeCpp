@@ -90,6 +90,8 @@ SelectedRow::SelectedRow(int size)
     : size(size)
     , selectedPlane(XOY)
     , selectedRowIndex(0)
+    , alpha(0)
+    , animationDirection(false)
 {
 }
 
@@ -130,19 +132,20 @@ void SelectedRow::draw()
         MatrixScale(scaleX, scaleY, scaleZ),
         MatrixTranslate(offsetX, offsetY, offsetZ));
 
+    float deltaAlpha = GetFrameTime() * ANIMATION_SPEED;
     if (alpha >= MAX_ALPHA) {
         animationDirection = true;
-        alpha = max(MIN_ALPHA, alpha - ANIMATION_SPEED);
+        alpha = max(MIN_ALPHA, alpha - deltaAlpha);
     } else if (alpha <= MIN_ALPHA) {
         animationDirection = false;
-        alpha = min(MAX_ALPHA, alpha + ANIMATION_SPEED);
+        alpha = min(MAX_ALPHA, alpha + deltaAlpha);
     } else if (animationDirection) {
-        alpha = max(MIN_ALPHA, alpha - ANIMATION_SPEED);
+        alpha = max(MIN_ALPHA, alpha - deltaAlpha);
     } else {
-        alpha = min(MAX_ALPHA, alpha + ANIMATION_SPEED);
+        alpha = min(MAX_ALPHA, alpha + deltaAlpha);
     }
 
-    materials[SELECTED_ROW_MATERIAL].maps[MATERIAL_MAP_DIFFUSE].color.a = alpha;
+    materials[SELECTED_ROW_MATERIAL].maps[MATERIAL_MAP_DIFFUSE].color.a = char(alpha);
     DrawMesh(selectedRowMesh, materials[SELECTED_ROW_MATERIAL], transform);
 }
 
