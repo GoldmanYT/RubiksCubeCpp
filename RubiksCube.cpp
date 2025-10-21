@@ -1,4 +1,4 @@
-#include "RubiksCube.hpp"
+п»ї#include "RubiksCube.hpp"
 
 RubiksCube::RubiksCube()
 {
@@ -29,28 +29,28 @@ void RubiksCube::rotate(CubePlane plane, int rowIndex, bool direction)
     StickerColor temp;
     int side = -1;
     if (rowIndex == 0) {
-        // Самая ближняя сторона к плоскости
+        // РЎР°РјР°СЏ Р±Р»РёР¶РЅСЏСЏ СЃС‚РѕСЂРѕРЅР° Рє РїР»РѕСЃРєРѕСЃС‚Рё
         side = ROTATION_SIDE[plane][0];
     } else if (rowIndex == size - 1) {
-        // Самая дальняя сторона от плоскости
+        // РЎР°РјР°СЏ РґР°Р»СЊРЅСЏСЏ СЃС‚РѕСЂРѕРЅР° РѕС‚ РїР»РѕСЃРєРѕСЃС‚Рё
         side = ROTATION_SIDE[plane][1];
     }
 
-    // если side = -1, то вращение не требуется
+    // РµСЃР»Рё side = -1, С‚Рѕ РІСЂР°С‰РµРЅРёРµ РЅРµ С‚СЂРµР±СѓРµС‚СЃСЏ
     if (side != -1) {
-        // Вращение самой стороны
+        // Р’СЂР°С‰РµРЅРёРµ СЃР°РјРѕР№ СЃС‚РѕСЂРѕРЅС‹
         for (int x = 0; x < (size + 1) / 2; ++x) {
             for (int y = 0; y < size / 2; ++y) {
                 pair<int, int> indexes[4] = {
                     { x, y },
-                    { size - y - 1, x },
+                    { y, size - x - 1 },
                     { size - x - 1, size - y - 1 },
-                    { y, size - x - 1 }
+                    { size - y - 1, x }
                 };
                 temp = stickers[side][x][y];
 
-                // по часовой стрелке
-                if (direction) {
+                // РїРѕ С‡Р°СЃРѕРІРѕР№ СЃС‚СЂРµР»РєРµ
+                if (direction != ROTATION_DIRECTION[side]) {
                     swap(indexes[1], indexes[3]);
                 }
 
@@ -86,7 +86,7 @@ void RubiksCube::rotate(CubePlane plane, int rowIndex, bool direction)
             }
         }
 
-        // по часовой стрелке
+        // РїРѕ С‡Р°СЃРѕРІРѕР№ СЃС‚СЂРµР»РєРµ
         if (direction) {
             swap(indexes[1], indexes[3]);
             swap(sides[1], sides[3]);

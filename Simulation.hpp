@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "RubiksCube.hpp"
 #include "RubiksCubeModel.hpp"

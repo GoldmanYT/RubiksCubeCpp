@@ -1,4 +1,4 @@
-#include "Data.hpp"
+﻿#include "Data.hpp"
 
 const int WINDOW_WIDTH = 800;
 
@@ -7,6 +7,8 @@ const int WINDOW_HEIGHT = 600;
 Camera camera;
 
 const int DEFAULT_SIZE = 3;
+
+bool ROTATION_DIRECTION[SIDE_COUNT] = { false, true, false, false, true, false };
 
 RotationData ROTATION_SIDES[3] = {
     { false, { STICKER_GREEN, STICKER_ORANGE, STICKER_BLUE, STICKER_RED } },

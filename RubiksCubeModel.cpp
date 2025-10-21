@@ -1,4 +1,4 @@
-#include "RubiksCubeModel.hpp"
+п»ї#include "RubiksCubeModel.hpp"
 
 RubiksCubeModel::RubiksCubeModel()
     : rubiksCube()
@@ -23,7 +23,7 @@ void RubiksCubeModel::reset(int size)
             for (int y = 0; y < size; ++y) {
                 stickers[side][x][y] = GraphicObjectData {
                     materials[side],
-                    vector<Matrix> { getStickerTransform(side, x, y) }
+                    getStickerTransform(side, x, y)
                 };
             }
         }
@@ -38,7 +38,7 @@ void RubiksCubeModel::reset(int size)
 
                 pieces[x * size * size + y * size + z] = GraphicObjectData {
                     materials[CUBE_MATERIAL],
-                    vector<Matrix> { MatrixTranslate(posX, posY, posZ) }
+                    MatrixTranslate(posX, posY, posZ)
                 };
             }
         }
@@ -192,27 +192,20 @@ Matrix RubiksCubeModel::getStickerTransform(int side, int x, int y, float angle)
 
 void RubiksCubeModel::draw()
 {
-    // Отрисовка кусочков кубика Рубика
+    // РћС‚СЂРёСЃРѕРІРєР° РєСѓСЃРѕС‡РєРѕРІ РєСѓР±РёРєР° Р СѓР±РёРєР°
     for (GraphicObjectData& piece : pieces) {
-        Matrix transform = MatrixIdentity();
-        for (Matrix& transform2 : piece.transforms) {
-            transform = MatrixMultiply(transform, transform2);
-        }
-        DrawMesh(pieceMesh, piece.material, transform);
+        DrawMesh(pieceMesh, piece.material, piece.transform);
     }
 
-    // Отрисовка стикеров кубика Рубика
+    // РћС‚СЂРёСЃРѕРІРєР° СЃС‚РёРєРµСЂРѕРІ РєСѓР±РёРєР° Р СѓР±РёРєР°
     for (auto& stickerSide : stickers) {
         for (auto& stickerRow : stickerSide) {
             for (GraphicObjectData& sticker : stickerRow) {
-                Matrix transform = MatrixIdentity();
-                for (Matrix& transform2 : sticker.transforms) {
-                    transform = MatrixMultiply(transform, transform2);
-                }
-                DrawMesh(stickerMesh, sticker.material, transform);
+                DrawMesh(stickerMesh, sticker.material, sticker.transform);
             }
         }
     }
 
+    // РћС‚СЂРёСЃРѕРІРєР° РІС‹Р±СЂР°РЅРЅРѕР№ "РїРѕР»РѕСЃРєРё"
     selectedRow.draw();
 }

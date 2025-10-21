@@ -1,35 +1,35 @@
-#pragma once
+п»ї#pragma once
 
 #include "Data.hpp"
 
-// Класс для представления кубика Рубика
+// РљР»Р°СЃСЃ РґР»СЏ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РєСѓР±РёРєР° Р СѓР±РёРєР°
 class RubiksCube {
 public:
-    // Конструктор для 3x3x3
+    // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ 3x3x3
     RubiksCube();
 
-    // Конструктор для size x size x size
+    // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ size x size x size
     RubiksCube(int size);
 
-    // Метод, возвращающий куб в исходное положение
+    // РњРµС‚РѕРґ, РІРѕР·РІСЂР°С‰Р°СЋС‰РёР№ РєСѓР± РІ РёСЃС…РѕРґРЅРѕРµ РїРѕР»РѕР¶РµРЅРёРµ
     void reset(int size = DEFAULT_SIZE);
 
-    // Метод, реализующий ращение грани
-    //  plane: ось вращения грани
-    //  rowIndex: номер "полоски", которая вращается
-    //  direction: направление вращения (false = против ЧС, true = по ЧС)
+    // РњРµС‚РѕРґ, СЂРµР°Р»РёР·СѓСЋС‰РёР№ СЂР°С‰РµРЅРёРµ РіСЂР°РЅРё
+    //  plane: РѕСЃСЊ РІСЂР°С‰РµРЅРёСЏ РіСЂР°РЅРё
+    //  rowIndex: РЅРѕРјРµСЂ "РїРѕР»РѕСЃРєРё", РєРѕС‚РѕСЂР°СЏ РІСЂР°С‰Р°РµС‚СЃСЏ
+    //  direction: РЅР°РїСЂР°РІР»РµРЅРёРµ РІСЂР°С‰РµРЅРёСЏ (false = РїСЂРѕС‚РёРІ Р§РЎ, true = РїРѕ Р§РЎ)
     void rotate(CubePlane plane, int rowIndex, bool direction);
 
-    // Getter для поля size
+    // Getter РґР»СЏ РїРѕР»СЏ size
     int getSize() const;
 
-    // Getter для поля stickers
+    // Getter РґР»СЏ РїРѕР»СЏ stickers
     array<vector<vector<StickerColor>>, SIDE_COUNT>& getStickers();
 
 private:
-    // Размер кубика Рубика
+    // Р Р°Р·РјРµСЂ РєСѓР±РёРєР° Р СѓР±РёРєР°
     int size;
 
-    // Логическое представление стикеров кубика
+    // Р›РѕРіРёС‡РµСЃРєРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ СЃС‚РёРєРµСЂРѕРІ РєСѓР±РёРєР°
     array<vector<vector<StickerColor>>, SIDE_COUNT> stickers;
 };
