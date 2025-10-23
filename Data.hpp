@@ -27,9 +27,9 @@ const int SIDE_COUNT = 6;
 
 // Перечисление всех осей куба
 enum CubePlane {
+    ZOX,
     XOY,
-    YOZ,
-    ZOX
+    YOZ
 };
 
 // Перечисление всех цветок кубика Рубика

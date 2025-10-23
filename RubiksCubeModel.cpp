@@ -16,6 +16,11 @@ RubiksCubeModel::RubiksCubeModel(int size)
 
 void RubiksCubeModel::reset(int size)
 {
+    this->size = size;
+    rubiksCube = RubiksCube(size);
+    selectedRow.size = size;
+    selectedRow.selectedRowIndex = 0;
+
     for (int side = 0; side < SIDE_COUNT; ++side) {
         stickers[side].resize(size);
         for (int x = 0; x < size; ++x) {
@@ -28,22 +33,20 @@ void RubiksCubeModel::reset(int size)
             }
         }
     }
-    pieces.resize(size * size * size);
+    pieces.resize(size);
     for (int x = 0; x < size; ++x) {
+        pieces[x].resize(size);
         for (int y = 0; y < size; ++y) {
+            pieces[x][y].resize(size);
             for (int z = 0; z < size; ++z) {
-                float posX = x * PIECE_SIZE - PIECE_SIZE * (size - 1) / 2;
-                float posY = y * PIECE_SIZE - PIECE_SIZE * (size - 1) / 2;
-                float posZ = z * PIECE_SIZE - PIECE_SIZE * (size - 1) / 2;
-
-                pieces[x * size * size + y * size + z] = GraphicObjectData {
+                pieces[x][y][z] = GraphicObjectData {
                     materials[CUBE_MATERIAL],
-                    MatrixTranslate(posX, posY, posZ)
+                    getPieceTransform(x, y, z)
                 };
             }
         }
     }
-    selectedRow.selectedPlane = XOY;
+    selectedRow.selectedPlane = ZOX;
     selectedRow.selectedRowIndex = 0;
 }
 
@@ -83,13 +86,17 @@ void RubiksCubeModel::previousRowIndex()
 void RubiksCubeModel::rotate(bool direction)
 {
     rubiksCube.rotate(selectedRow.selectedPlane, selectedRow.selectedRowIndex, bool(direction));
+    selectedRow.rotate(direction != ROTATION_DIRECTION[selectedRow.selectedPlane]);
+
     updateStickers();
 }
 
 SelectedRow::SelectedRow(int size)
     : size(size)
-    , selectedPlane(XOY)
+    , selectedPlane(ZOX)
     , selectedRowIndex(0)
+    , angle(0.0f)
+    , rotationDirection(false)
     , alpha(0)
     , animationDirection(false)
 {
@@ -110,29 +117,43 @@ void SelectedRow::draw()
     float offsetY = 0.0f;
     float offsetZ = 0.0f;
 
+    Matrix rotation = MatrixIdentity();
+
     switch (selectedPlane) {
-    case XOY:
+    case ZOX:
         scaleX = bigScale;
         offsetY = bigOffset;
         scaleZ = bigScale;
+        rotation = MatrixRotateY(angle);
         break;
-    case YOZ:
+    case XOY:
         scaleX = bigScale;
         scaleY = bigScale;
         offsetZ = bigOffset;
+        rotation = MatrixRotateZ(angle);
         break;
-    case ZOX:
+    case YOZ:
         offsetX = bigOffset;
         scaleY = bigScale;
         scaleZ = bigScale;
+        rotation = MatrixRotateX(angle);
         break;
     }
 
     Matrix transform = MatrixMultiply(
-        MatrixScale(scaleX, scaleY, scaleZ),
-        MatrixTranslate(offsetX, offsetY, offsetZ));
+        MatrixMultiply(
+            MatrixScale(scaleX, scaleY, scaleZ),
+            MatrixTranslate(offsetX, offsetY, offsetZ)),
+        rotation);
 
-    float deltaAlpha = GetFrameTime() * ANIMATION_SPEED;
+    DrawMesh(selectedRowMesh, materials[SELECTED_ROW_MATERIAL], transform);
+    update();
+}
+
+void SelectedRow::update()
+{
+    float frameTime = GetFrameTime();
+    float deltaAlpha = frameTime * ANIMATION_SPEED;
     if (alpha >= MAX_ALPHA) {
         animationDirection = true;
         alpha = max(MIN_ALPHA, alpha - deltaAlpha);
@@ -146,18 +167,37 @@ void SelectedRow::draw()
     }
 
     materials[SELECTED_ROW_MATERIAL].maps[MATERIAL_MAP_DIFFUSE].color.a = char(alpha);
-    DrawMesh(selectedRowMesh, materials[SELECTED_ROW_MATERIAL], transform);
+
+    // По часовой стрелке
+    if (rotationDirection) {
+        angle -= frameTime * ROTATION_SPEED;
+        angle = max(angle, 0.0f);
+    } else {
+        angle += frameTime * ROTATION_SPEED;
+        angle = min(angle, 0.0f);
+    }
 }
 
-Matrix RubiksCubeModel::getStickerTransform(int side, int x, int y, float angle)
+void SelectedRow::rotate(bool direction)
+{
+    // По часовой стрелке
+    if (direction) {
+        angle = PI / 2;
+    } else {
+        angle = -PI / 2;
+    }
+    rotationDirection = direction;
+}
+
+Matrix RubiksCubeModel::getStickerTransform(int side, int x, int y)
 {
     float offset = PIECE_SIZE * (size - 1) / 2;
     float stickerOffset = offset + PIECE_SIZE / 2 + TINY_OFFSET;
     float offsetX = -offset + x * PIECE_SIZE;
     float offsetY = -offset + y * PIECE_SIZE;
 
-    Matrix scale = MatrixScale(1.0f, 1.0f, 1.0f);
     Matrix rotation = MatrixIdentity();
+    Matrix rotation2 = MatrixIdentity();
     Matrix translation = MatrixIdentity();
 
     switch (side) {
@@ -174,7 +214,7 @@ Matrix RubiksCubeModel::getStickerTransform(int side, int x, int y, float angle)
         translation = MatrixTranslate(stickerOffset, offsetX, offsetY);
         break;
     case STICKER_YELLOW:
-        rotation = MatrixRotateY(PI);
+        rotation = MatrixRotateX(PI);
         translation = MatrixTranslate(offsetY, -stickerOffset, offsetX);
         break;
     case STICKER_BLUE:
@@ -187,20 +227,127 @@ Matrix RubiksCubeModel::getStickerTransform(int side, int x, int y, float angle)
         break;
     }
 
-    return MatrixMultiply(MatrixMultiply(scale, rotation), translation);
+    float angle = selectedRow.angle;
+    if (isStickerRotated(side, x, y)) {
+        switch (selectedRow.selectedPlane) {
+        case ZOX:
+            rotation2 = MatrixRotateY(angle);
+            break;
+        case XOY:
+            rotation2 = MatrixRotateZ(angle);
+            break;
+        case YOZ:
+            rotation2 = MatrixRotateX(angle);
+            break;
+        }
+    }
+
+    return MatrixMultiply(MatrixMultiply(rotation, translation), rotation2);
+}
+
+bool RubiksCubeModel::isStickerRotated(int side, int x, int y)
+{
+    int plane = selectedRow.selectedPlane;
+    int rowIndex = selectedRow.selectedRowIndex;
+    int rotationSide = -1;
+
+    if (rowIndex == 0) {
+        // Самая ближняя сторона к плоскости
+        rotationSide = ROTATION_SIDE[plane][0];
+    } else if (rowIndex == size - 1) {
+        // Самая дальняя сторона от плоскости
+        rotationSide = ROTATION_SIDE[plane][1];
+    }
+
+    bool rotated = rotationSide == side;
+    RotationData rotationData = ROTATION_SIDES[plane];
+    bool indexOrder = rotationData.initialIndex;
+    int* sides = rotationData.sides;
+
+    for (int sideIndex = 0; sideIndex < 4; ++sideIndex, indexOrder = !indexOrder) {
+        if (side == sides[sideIndex]) {
+            if (sideIndex < 2) {
+                if (indexOrder) {
+                    rotated = rowIndex == x;
+                } else {
+                    rotated = rowIndex == y;
+                }
+            } else {
+                if (indexOrder) {
+                    rotated = rowIndex == x;
+                } else {
+                    rotated = rowIndex == y - size - 1;
+                }
+            }
+        }
+    }
+
+    return rotated;
+}
+
+Matrix RubiksCubeModel::getPieceTransform(int x, int y, int z)
+{
+    float offset = PIECE_SIZE * (size - 1) / 2;
+    float posX = x * PIECE_SIZE - offset;
+    float posY = y * PIECE_SIZE - offset;
+    float posZ = z * PIECE_SIZE - offset;
+
+    Matrix translate = MatrixTranslate(posX, posY, posZ);
+    Matrix rotation = MatrixIdentity();
+
+    float angle = selectedRow.angle;
+    if (isPieceRotated(x, y, z)) {
+        switch (selectedRow.selectedPlane) {
+        case ZOX:
+            rotation = MatrixRotateY(angle);
+            break;
+        case XOY:
+            rotation = MatrixRotateZ(angle);
+            break;
+        case YOZ:
+            rotation = MatrixRotateX(angle);
+            break;
+        }
+    }
+
+    return MatrixMultiply(translate, rotation);
+}
+
+bool RubiksCubeModel::isPieceRotated(int x, int y, int z)
+{
+    CubePlane plane = selectedRow.selectedPlane;
+    int rowIndex = selectedRow.selectedRowIndex;
+
+    switch (plane) {
+    case ZOX:
+        return rowIndex == y;
+    case XOY:
+        return rowIndex == z;
+    case YOZ:
+        return rowIndex == x;
+    }
+    return false;
 }
 
 void RubiksCubeModel::draw()
 {
     // Отрисовка кусочков кубика Рубика
-    for (GraphicObjectData& piece : pieces) {
-        DrawMesh(pieceMesh, piece.material, piece.transform);
+    for (int x = 0; x < size; ++x) {
+        for (int y = 0; y < size; ++y) {
+            for (int z = 0; z < size; ++z) {
+                GraphicObjectData& piece = pieces[x][y][z];
+                piece.transform = getPieceTransform(x, y, z);
+                DrawMesh(pieceMesh, piece.material, piece.transform);
+            }
+        }
     }
 
     // Отрисовка стикеров кубика Рубика
-    for (auto& stickerSide : stickers) {
-        for (auto& stickerRow : stickerSide) {
-            for (GraphicObjectData& sticker : stickerRow) {
+    for (int side = 0; side < SIDE_COUNT; ++side) {
+        for (int x = 0; x < size; ++x) {
+            for (int y = 0; y < size; ++y) {
+                GraphicObjectData& sticker = stickers[side][x][y];
+                sticker.transform = getStickerTransform(side, x, y);
                 DrawMesh(stickerMesh, sticker.material, sticker.transform);
             }
         }

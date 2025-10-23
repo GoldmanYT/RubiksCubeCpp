@@ -55,7 +55,7 @@ void initData()
     pieceMesh = GenMeshCube(PIECE_SIZE, PIECE_SIZE, PIECE_SIZE);
     selectedRowMesh = GenMeshCube(1.0f, 1.0f, 1.0f);
     camera = Camera {
-        { DEFAULT_SIZE * 3.0f, DEFAULT_SIZE * 3.0f, DEFAULT_SIZE * 3.0f },
+        { DEFAULT_SIZE * 3.0f, -DEFAULT_SIZE * 3.0f, DEFAULT_SIZE * 3.0f },
         { 0.0f, 0.0f, 0.0f },
         { 0.0f, 1.0f, 0.0f },
         DEFAULT_SIZE * 2.0f,

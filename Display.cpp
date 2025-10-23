@@ -47,9 +47,9 @@ void setHotkeys()
     auto previousRowIndex = [](int) { rubiksCubeModel.previousRowIndex(); };
     auto rotate = [](int direction) { rubiksCubeModel.rotate(direction); };
 
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_W, XOY, selectPlane });
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_D, YOZ, selectPlane });
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_A, ZOX, selectPlane });
+    keyboardCallbacks.push_back(KeyboardCallback { KEY_W, ZOX, selectPlane });
+    keyboardCallbacks.push_back(KeyboardCallback { KEY_D, XOY, selectPlane });
+    keyboardCallbacks.push_back(KeyboardCallback { KEY_A, YOZ, selectPlane });
 
     for (int key = 0; key < 9; ++key) {
         keyboardCallbacks.push_back(KeyboardCallback { key + KEY_ONE, key, selectRowIndex });

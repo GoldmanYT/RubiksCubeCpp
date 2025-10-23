@@ -13,11 +13,20 @@ struct GraphicObjectData {
 // Класс, моделирующий выбранную "полоску"
 class SelectedRow {
 public:
+    // Конструктор по умолчанию
+    SelectedRow();
+
     // Конструктор
     SelectedRow(int size);
 
     // Метод для отрисовки выбранной "полоски"
     void draw();
+
+    // Метод для обновления данных о выбранной "полоске"
+    void update();
+
+    // Метод для вращения выбранной "полоски"
+    void rotate(bool direction);
 
     // Размера кубика Рубика
     int size;
@@ -28,15 +37,26 @@ public:
     // Выбранный индекс "полоски"
     int selectedRowIndex;
 
+    // Угол вращения выбранной "полоски"
+    float angle;
+
+    // Направление вращения выбранной "полоски"
+    //  false = против ЧС
+    //  true  = по ЧС
+    bool rotationDirection;
+
     // Прозрачность выбранной "полоски"
     float alpha;
 
-    // Направление анимации
+    // Скорость анимации вращения
+    const float ROTATION_SPEED = PI;
+
+    // Направление анимации мигания
     //  false = ++
     //  true  = --
     bool animationDirection;
 
-    // Скорость анимации
+    // Скорость анимации мигания
     const float ANIMATION_SPEED = 200.0f;
 
     // Минимальная прозрачность
@@ -92,11 +112,21 @@ private:
     array<vector<vector<GraphicObjectData>>, SIDE_COUNT> stickers;
 
     // Физическое представление кусочков кубика в виде Мешей
-    vector<GraphicObjectData> pieces;
+    vector<vector<vector<GraphicObjectData>>> pieces;
 
     // Выбранная полоска
     SelectedRow selectedRow;
 
 private:
-    Matrix getStickerTransform(int side, int x, int y, float angle = 0.0f);
+    // Метод для вращения стикера
+    Matrix getStickerTransform(int side, int x, int y);
+
+    // Метод для определения, вращается ли кусочек
+    bool isStickerRotated(int side, int x, int y);
+
+    // Метод для вращения кусочка
+    Matrix getPieceTransform(int x, int y, int z);
+
+    // Метод для определения, вращается ли кусочек
+    bool isPieceRotated(int x, int y, int z);
 };
