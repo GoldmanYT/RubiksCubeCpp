@@ -26,6 +26,9 @@ public:
     // Getter для поля stickers
     array<vector<vector<StickerColor>>, SIDE_COUNT>& getStickers();
 
+    // Метод, собирающий кубик Рубика
+    void solve();
+
 private:
     // Размер кубика Рубика
     int size;

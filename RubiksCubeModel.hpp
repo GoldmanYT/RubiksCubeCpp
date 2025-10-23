@@ -10,12 +10,11 @@ struct GraphicObjectData {
     Matrix transform;
 };
 
+class RubiksCubeModel;
+
 // Класс, моделирующий выбранную "полоску"
 class SelectedRow {
 public:
-    // Конструктор по умолчанию
-    SelectedRow();
-
     // Конструктор
     SelectedRow(int size);
 
@@ -49,7 +48,7 @@ public:
     float alpha;
 
     // Скорость анимации вращения
-    const float ROTATION_SPEED = PI;
+    const float ROTATION_SPEED = 8 * PI;
 
     // Направление анимации мигания
     //  false = ++
@@ -64,6 +63,32 @@ public:
 
     // Максимальная прозрачность
     const float MAX_ALPHA = 128.0f;
+};
+
+// Класс, хранящий данные о замешивании кубика Рубика
+class Scrambler {
+public:
+    // Конструктор по умолчанию
+    Scrambler();
+
+    // Конструктор
+    Scrambler(int size);
+
+    // Метод для начала замешивания
+    void scramble();
+
+    // Метод для обновления состояния замешивания
+    void update(RubiksCubeModel& rubiksCubeModel, SelectedRow& selectedRow);
+
+private:
+    // Размер кубика Рубика
+    int size;
+
+    // Число выполненных вращений
+    int rotationCount;
+
+    // Число требуемых вращений
+    int ROTATION_COUNT;
 };
 
 // Класс для представления модели кубика Рубика
@@ -101,6 +126,12 @@ public:
     //  direction = true  => по ЧС
     void rotate(bool direction);
 
+    // Метод, замешивающий кубик Рубика
+    void scramble();
+
+    // Метод, собирающий кубик Рубика
+    void solve();
+
 private:
     // Размер кубика Рубика
     int size;
@@ -116,6 +147,9 @@ private:
 
     // Выбранная полоска
     SelectedRow selectedRow;
+
+    // Замешиватель кубика Рубика
+    Scrambler scrambler;
 
 private:
     // Метод для вращения стикера

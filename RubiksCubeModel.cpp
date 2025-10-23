@@ -4,6 +4,7 @@ RubiksCubeModel::RubiksCubeModel()
     : rubiksCube()
     , size(DEFAULT_SIZE)
     , selectedRow(DEFAULT_SIZE)
+    , scrambler()
 {
 }
 
@@ -11,6 +12,7 @@ RubiksCubeModel::RubiksCubeModel(int size)
     : rubiksCube(size)
     , size(size)
     , selectedRow(size)
+    , scrambler(size)
 {
 }
 
@@ -88,6 +90,53 @@ void RubiksCubeModel::rotate(bool direction)
     rubiksCube.rotate(selectedRow.selectedPlane, selectedRow.selectedRowIndex, bool(direction));
     selectedRow.rotate(direction != ROTATION_DIRECTION[selectedRow.selectedPlane]);
 
+    updateStickers();
+}
+
+Scrambler::Scrambler()
+    : size(DEFAULT_SIZE)
+    , rotationCount(size * size * size)
+    , ROTATION_COUNT(rotationCount)
+{
+}
+
+Scrambler::Scrambler(int size)
+    : size(size)
+    , rotationCount(size * size * size)
+    , ROTATION_COUNT(rotationCount)
+{
+}
+
+void Scrambler::scramble()
+{
+    rotationCount = 0;
+}
+
+void Scrambler::update(RubiksCubeModel& rubiksCubeModel, SelectedRow& selectedRow)
+{
+    if (rotationCount >= ROTATION_COUNT) {
+        return;
+    }
+    if (selectedRow.angle == 0.0f) {
+        ++rotationCount;
+        CubePlane plane = CubePlane(rand() % (SIDE_COUNT / 2));
+        int rowIndex = rand() % size;
+        bool direction = rand() % 2;
+
+        selectedRow.selectedPlane = plane;
+        selectedRow.selectedRowIndex = rowIndex;
+        rubiksCubeModel.rotate(direction);
+    }
+}
+
+void RubiksCubeModel::scramble()
+{
+    scrambler.scramble();
+}
+
+void RubiksCubeModel::solve()
+{
+    rubiksCube.solve();
     updateStickers();
 }
 
@@ -266,18 +315,10 @@ bool RubiksCubeModel::isStickerRotated(int side, int x, int y)
 
     for (int sideIndex = 0; sideIndex < 4; ++sideIndex, indexOrder = !indexOrder) {
         if (side == sides[sideIndex]) {
-            if (sideIndex < 2) {
-                if (indexOrder) {
-                    rotated = rowIndex == x;
-                } else {
-                    rotated = rowIndex == y;
-                }
+            if (indexOrder) {
+                rotated = rowIndex == x;
             } else {
-                if (indexOrder) {
-                    rotated = rowIndex == x;
-                } else {
-                    rotated = rowIndex == y - size - 1;
-                }
+                rotated = rowIndex == y;
             }
         }
     }
@@ -355,4 +396,7 @@ void RubiksCubeModel::draw()
 
     // Отрисовка выбранной "полоски"
     selectedRow.draw();
+
+    // Обновление замешивателя кубика Рубика
+    scrambler.update(*this, selectedRow);
 }

@@ -42,25 +42,36 @@ void setHotkeys()
     }
 
     auto selectPlane = [](int plane) { rubiksCubeModel.setPlane(CubePlane(plane)); };
-    auto selectRowIndex = [](int rowIndex) { rubiksCubeModel.setRowIndex(rowIndex); };
-    auto nextRowIndex = [](int) { rubiksCubeModel.nextRowIndex(); };
-    auto previousRowIndex = [](int) { rubiksCubeModel.previousRowIndex(); };
-    auto rotate = [](int direction) { rubiksCubeModel.rotate(direction); };
 
     keyboardCallbacks.push_back(KeyboardCallback { KEY_W, ZOX, selectPlane });
     keyboardCallbacks.push_back(KeyboardCallback { KEY_D, XOY, selectPlane });
     keyboardCallbacks.push_back(KeyboardCallback { KEY_A, YOZ, selectPlane });
+
+    auto selectRowIndex = [](int rowIndex) { rubiksCubeModel.setRowIndex(rowIndex); };
 
     for (int key = 0; key < 9; ++key) {
         keyboardCallbacks.push_back(KeyboardCallback { key + KEY_ONE, key, selectRowIndex });
         keyboardCallbacks.push_back(KeyboardCallback { key + KEY_KP_1, key, selectRowIndex });
     }
 
+    auto rotate = [](int direction) { rubiksCubeModel.rotate(direction); };
+
     keyboardCallbacks.push_back(KeyboardCallback { KEY_SPACE, true, rotate });
     keyboardCallbacks.push_back(KeyboardCallback { KEY_LEFT_SHIFT, false, rotate });
+
+    auto nextRowIndex = [](int) { rubiksCubeModel.nextRowIndex(); };
+    auto previousRowIndex = [](int) { rubiksCubeModel.previousRowIndex(); };
 
     keyboardCallbacks.push_back(KeyboardCallback { KEY_UP, 0, nextRowIndex });
     keyboardCallbacks.push_back(KeyboardCallback { KEY_DOWN, 0, previousRowIndex });
     keyboardCallbacks.push_back(KeyboardCallback { KEY_RIGHT, 0, nextRowIndex });
     keyboardCallbacks.push_back(KeyboardCallback { KEY_LEFT, 0, previousRowIndex });
+
+    auto scramble = [](int) { rubiksCubeModel.scramble(); };
+
+    keyboardCallbacks.push_back(KeyboardCallback { KEY_BACKSPACE, 0, scramble });
+
+    auto solve = [](int) { rubiksCubeModel.solve(); };
+
+    keyboardCallbacks.push_back(KeyboardCallback { KEY_ENTER, 0, solve });
 }

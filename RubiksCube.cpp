@@ -111,3 +111,8 @@ array<vector<vector<StickerColor>>, SIDE_COUNT>& RubiksCube::getStickers()
 {
     return stickers;
 }
+
+void RubiksCube::solve()
+{
+    reset(size);
+}

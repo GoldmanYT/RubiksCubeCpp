@@ -3,6 +3,7 @@
 #include <array>
 #include <iostream>
 #include <memory>
+#include <random>
 #include <vector>
 
 #include <raylib.h>

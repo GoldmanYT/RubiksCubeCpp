@@ -46,16 +46,20 @@ int COUNT_MARGINS = 3;
 
 void initData()
 {
+    srand((unsigned int)time(0));
+
     for (int colorIndex = 0; colorIndex < colors.size(); ++colorIndex) {
         materials.push_back(LoadMaterialDefault());
         MaterialMap& map = materials[colorIndex].maps[MATERIAL_MAP_DIFFUSE];
         map.color = colors[colorIndex];
     }
+
     stickerMesh = GenMeshPlane(STICKER_SIZE, STICKER_SIZE, 1, 1);
     pieceMesh = GenMeshCube(PIECE_SIZE, PIECE_SIZE, PIECE_SIZE);
     selectedRowMesh = GenMeshCube(1.0f, 1.0f, 1.0f);
+
     camera = Camera {
-        { DEFAULT_SIZE * 3.0f, -DEFAULT_SIZE * 3.0f, DEFAULT_SIZE * 3.0f },
+        { DEFAULT_SIZE * 3.0f, DEFAULT_SIZE * 3.0f, DEFAULT_SIZE * 3.0f },
         { 0.0f, 0.0f, 0.0f },
         { 0.0f, 1.0f, 0.0f },
         DEFAULT_SIZE * 2.0f,

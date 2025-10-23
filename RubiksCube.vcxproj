@@ -139,6 +139,7 @@
     <ClCompile Include="Simulation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CubeCamera.hpp" />
     <ClInclude Include="Data.hpp" />
     <ClInclude Include="Display.hpp" />
     <ClInclude Include="RubiksCube.hpp" />
