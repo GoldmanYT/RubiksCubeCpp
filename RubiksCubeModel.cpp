@@ -95,14 +95,14 @@ void RubiksCubeModel::rotate(bool direction)
 
 Scrambler::Scrambler()
     : size(DEFAULT_SIZE)
-    , rotationCount(size * size * size)
+    , rotationCount(ROTATION_COUNT_K * size)
     , ROTATION_COUNT(rotationCount)
 {
 }
 
 Scrambler::Scrambler(int size)
     : size(size)
-    , rotationCount(size * size * size)
+    , rotationCount(ROTATION_COUNT_K * size)
     , ROTATION_COUNT(rotationCount)
 {
 }

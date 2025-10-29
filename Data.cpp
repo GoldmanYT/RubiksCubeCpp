@@ -44,6 +44,8 @@ Mesh selectedRowMesh;
 
 int COUNT_MARGINS = 3;
 
+const int ROTATION_COUNT_K = 10;
+
 void initData()
 {
     srand((unsigned int)time(0));

@@ -3,7 +3,7 @@
 
 void display()
 {
-    UpdateCamera(&camera, CAMERA_ORBITAL);
+    UpdateCamera(&camera, CAMERA_THIRD_PERSON);
 
     ClearBackground(SKYBLUE);
     BeginDrawing();
@@ -37,8 +37,7 @@ void mainloop()
 void setHotkeys()
 {
     for (int key = 0; key <= 348; ++key) {
-        keyboardCallbacks.push_back(
-            KeyboardCallback { key, key, logKeyboardPress });
+        keyboardCallbacks.push_back(KeyboardCallback { key, key, logKeyboardPress });
     }
 
     auto selectPlane = [](int plane) { rubiksCubeModel.setPlane(CubePlane(plane)); };
