@@ -116,3 +116,18 @@ void RubiksCube::solve()
 {
     reset(size);
 }
+
+bool RubiksCube::isSolved()
+{
+    for (int side = 0; side < SIDE_COUNT; ++side) {
+        StickerColor sticker = stickers[side][0][0];
+        for (int x = 0; x < size; ++x) {
+            for (int y = 0; y < size; ++y) {
+                if (stickers[side][x][y] != sticker) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}

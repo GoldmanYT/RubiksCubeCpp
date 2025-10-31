@@ -115,13 +115,13 @@ extern int COUNT_MARGINS;
 extern const int ROTATION_COUNT_K;
 
 // Ширина кнопки по умолчанию
-extern const float DEFAULT_BUTTON_WIDTH;
+extern const float DEFAULT_LAYOUT_WIDTH;
 
 // Высота кнопки по умолчанию
-extern const float DEFAULT_BUTTON_HEIGHT;
+extern const float DEFAULT_LAYOUT_HEIGHT;
 
 // Отступ кнопки от краёв экрана по умолчанию
-extern const float DEFAULT_BUTTON_OFFSET;
+extern const float DEFAULT_LAYOUT_OFFSET;
 
 // Индекс цвета кнопки из массива цветов
 extern const int BUTTON_COLOR;
@@ -137,6 +137,15 @@ extern Font font;
 
 // Количество кнопок
 const int BUTTON_COUNT = 11;
+
+// Количество надписей
+const int LABEL_COUNT = 2;
+
+// Индекс надписи с количеством ходов
+extern const int LABEL_MOVE_COUNT;
+
+// Индекс надписи с состоянием кубика Рубика (собран/нет)
+extern const int LABEL_SOLVED;
 
 // ------------ Функции ---------------
 

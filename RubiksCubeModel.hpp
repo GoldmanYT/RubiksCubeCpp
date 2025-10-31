@@ -80,6 +80,9 @@ public:
     // Метод для обновления состояния замешивания
     void update(RubiksCubeModel& rubiksCubeModel, SelectedRow& selectedRow);
 
+    // Замешивается ли кубик Рубика
+    bool isScrambling();
+
 private:
     // Размер кубика Рубика
     int size;
@@ -141,9 +144,18 @@ public:
     // Увеличить размер кубика Рубика
     void decreaseSize();
 
+    // Getter для количества ходов
+    int getMoveCount();
+
+    // Метод, возвращающий состояние кубика Рубика (собран/нет)
+    bool isSolved();
+
 private:
     // Размер кубика Рубика
     int size;
+
+    // Количество выполненных ходов
+    int moveCount;
 
     // Логическое представление кубика Рубика
     RubiksCube rubiksCube;

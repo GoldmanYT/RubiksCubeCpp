@@ -5,6 +5,7 @@ RubiksCubeModel::RubiksCubeModel()
     , size(DEFAULT_SIZE)
     , selectedRow(DEFAULT_SIZE)
     , scrambler()
+    , moveCount(0)
 {
 }
 
@@ -13,6 +14,7 @@ RubiksCubeModel::RubiksCubeModel(int size)
     , size(size)
     , selectedRow(size)
     , scrambler(size)
+    , moveCount(0)
 {
 }
 
@@ -23,6 +25,7 @@ void RubiksCubeModel::reset(int size)
     selectedRow.size = size;
     selectedRow.selectedRowIndex = 0;
     scrambler = Scrambler(size);
+    moveCount = 0;
 
     for (int side = 0; side < SIDE_COUNT; ++side) {
         stickers[side].resize(size);
@@ -96,6 +99,9 @@ void RubiksCubeModel::previousRowIndex()
 
 void RubiksCubeModel::rotate(bool direction)
 {
+    if (!scrambler.isScrambling()) {
+        moveCount++;
+    }
     rubiksCube.rotate(selectedRow.selectedPlane, selectedRow.selectedRowIndex, bool(direction));
     selectedRow.rotate(direction != ROTATION_DIRECTION[selectedRow.selectedPlane]);
 
@@ -123,7 +129,7 @@ void Scrambler::scramble()
 
 void Scrambler::update(RubiksCubeModel& rubiksCubeModel, SelectedRow& selectedRow)
 {
-    if (rotationCount >= ROTATION_COUNT) {
+    if (!isScrambling()) {
         return;
     }
     if (selectedRow.angle == 0.0f) {
@@ -138,15 +144,22 @@ void Scrambler::update(RubiksCubeModel& rubiksCubeModel, SelectedRow& selectedRo
     }
 }
 
+bool Scrambler::isScrambling()
+{
+    return rotationCount < ROTATION_COUNT;
+}
+
 void RubiksCubeModel::scramble()
 {
     scrambler.scramble();
+    moveCount = 0;
 }
 
 void RubiksCubeModel::solve()
 {
     rubiksCube.solve();
     updateStickers();
+    moveCount = 0;
 }
 
 void RubiksCubeModel::increaseSize()
@@ -157,6 +170,16 @@ void RubiksCubeModel::increaseSize()
 void RubiksCubeModel::decreaseSize()
 {
     reset(max(MIN_SIZE, size - 1));
+}
+
+int RubiksCubeModel::getMoveCount()
+{
+    return moveCount;
+}
+
+bool RubiksCubeModel::isSolved()
+{
+    return rubiksCube.isSolved();
 }
 
 SelectedRow::SelectedRow(int size)

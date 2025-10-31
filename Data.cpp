@@ -79,14 +79,14 @@ int COUNT_MARGINS = 3;
 // Коэффициент количества вращений при запутывании
 const int ROTATION_COUNT_K = 10;
 
-// Ширина кнопки по умолчанию
-const float DEFAULT_BUTTON_WIDTH = 1.0f / 4.0f;
+// Ширина элемента по умолчанию
+const float DEFAULT_LAYOUT_WIDTH = 1.0f / 4.0f;
 
 // Высота кнопки по умолчанию
-const float DEFAULT_BUTTON_HEIGHT = 1.0f / 10.0f;
+const float DEFAULT_LAYOUT_HEIGHT = 1.0f / 10.0f;
 
 // Отступ кнопки от краёв экрана
-const float DEFAULT_BUTTON_OFFSET = 0.02f;
+const float DEFAULT_LAYOUT_OFFSET = 0.02f;
 
 // Индекс цвета кнопки из массива цветов
 const int BUTTON_COLOR = SIDE_COUNT + 2;
@@ -99,6 +99,12 @@ const int FONT_COLOR = SIDE_COUNT;
 
 // Используемый шрифт
 Font font;
+
+// Индекс надписи с количеством ходов
+const int LABEL_MOVE_COUNT = 0;
+
+// Индекс надписи с состоянием кубика Рубика (собран/нет)
+const int LABEL_SOLVED = 1;
 
 void initData()
 {

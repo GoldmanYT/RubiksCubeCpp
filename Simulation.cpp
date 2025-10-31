@@ -2,7 +2,9 @@
 
 RubiksCubeModel rubiksCubeModel;
 vector<KeyboardCallback> keyboardCallbacks;
+
 array<Button, BUTTON_COUNT> buttons;
+array<Label, LABEL_COUNT> labels;
 
 void simulation()
 {

@@ -7,6 +7,7 @@
 extern RubiksCubeModel rubiksCubeModel;
 
 extern array<Button, BUTTON_COUNT> buttons;
+extern array<Label, LABEL_COUNT> labels;
 
 struct KeyboardCallback {
     int key;

@@ -6,3 +6,4 @@ void display();
 void init();
 void mainloop();
 void setHotkeys();
+void updateLabels();
