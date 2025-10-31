@@ -7,15 +7,15 @@ Button::Button()
 {
 }
 
-Button::Button(LayoutConstraint buttonConstraint, float offsetX, float offsetY, string text)
-    : Label(buttonConstraint, offsetX, offsetY, text)
+Button::Button(LayoutConstraint buttonConstraint, float offsetX, float offsetY, string text, bool symbols)
+    : Label(buttonConstraint, offsetX, offsetY, text, symbols)
     , param(0)
     , callback(nullptr)
 {
 }
 
-Button::Button(LayoutConstraint buttonConstraint, float offsetX, float offsetY, string text, int param, void (*callback)(int))
-    : Label(buttonConstraint, offsetX, offsetY, text)
+Button::Button(LayoutConstraint buttonConstraint, float offsetX, float offsetY, string text, int param, void (*callback)(int), bool symbols)
+    : Label(buttonConstraint, offsetX, offsetY, text, symbols)
     , param(param)
     , callback(callback)
 {

@@ -1,4 +1,4 @@
-#include "Label.hpp"
+﻿#include "Label.hpp"
 
 Label::Label()
     : constraint(TOP_LEFT)
@@ -6,42 +6,43 @@ Label::Label()
     , height(DEFAULT_LAYOUT_HEIGHT)
     , offsetX(DEFAULT_LAYOUT_OFFSET)
     , offsetY(DEFAULT_LAYOUT_OFFSET)
+    , symbols(false)
 {
 }
 
-Label::Label(LayoutConstraint labelConstraint, float offsetX, float offsetY, string text)
+Label::Label(LayoutConstraint labelConstraint, float offsetX, float offsetY, string text, bool symbols)
     : constraint(labelConstraint)
     , width(DEFAULT_LAYOUT_WIDTH)
     , height(DEFAULT_LAYOUT_HEIGHT)
     , offsetX(offsetX)
     , offsetY(offsetY)
     , text(text)
+    , symbols(symbols)
 {
 }
 
-Label::Label(LayoutConstraint labelConstraint, float width, float height, float offsetX, float offsetY, string text)
+Label::Label(LayoutConstraint labelConstraint, float width, float height, float offsetX, float offsetY, string text, bool symbols)
     : constraint(labelConstraint)
     , width(width)
     , height(height)
     , offsetX(offsetX)
     , offsetY(offsetY)
     , text(text)
+    , symbols(symbols)
 {
 }
 
 void Label::draw(int screenWidth, int screenHeight)
 {
+    Font labelFont = symbols ? symbolFont : font;
     Rectangle rectangle = getRectangle(screenWidth, screenHeight);
-    float textX, textY;
-    Vector2 textSize = MeasureTextEx(font, text.data(), FONT_SIZE, 0.0f);
+    Vector2 textSize = MeasureTextEx(labelFont, text.data(), FONT_SIZE, 0.0f);
+    Vector2 pos = { rectangle.x + (rectangle.width - textSize.x) / 2.0f,
+        rectangle.y + (rectangle.height - textSize.y) / 2.0f };
 
-    textX = rectangle.x + (rectangle.width - textSize.x) / 2.0f;
-    textY = rectangle.y + (rectangle.height - textSize.y) / 2.0f;
-
-    DrawText(
-        text.data(),
-        (int)textX, (int)textY,
-        (int)FONT_SIZE, colors[FONT_COLOR]);
+    DrawTextEx(
+        labelFont, text.data(), pos,
+        (int)FONT_SIZE, 0.0f, colors[FONT_COLOR]);
 }
 
 Rectangle Label::getRectangle(int screenWidth, int screenHeight)

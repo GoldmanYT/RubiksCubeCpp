@@ -133,7 +133,6 @@ void Scrambler::update(RubiksCubeModel& rubiksCubeModel, SelectedRow& selectedRo
         return;
     }
     if (selectedRow.angle == 0.0f) {
-        ++rotationCount;
         CubePlane plane = CubePlane(rand() % (SIDE_COUNT / 2));
         int rowIndex = rand() % size;
         bool direction = rand() % 2;
@@ -141,6 +140,7 @@ void Scrambler::update(RubiksCubeModel& rubiksCubeModel, SelectedRow& selectedRo
         selectedRow.selectedPlane = plane;
         selectedRow.selectedRowIndex = rowIndex;
         rubiksCubeModel.rotate(direction);
+        ++rotationCount;
     }
 }
 

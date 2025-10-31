@@ -1,10 +1,10 @@
 ﻿#include "Data.hpp"
 
 // Начальная ширина окна
-const int WINDOW_WIDTH = 800;
+const int WINDOW_WIDTH = 1024;
 
 // Начальная высота окна
-const int WINDOW_HEIGHT = 600;
+const int WINDOW_HEIGHT = 768;
 
 // Используемая камера
 Camera camera;
@@ -47,7 +47,7 @@ int ROTATION_SIDE[3][2] = {
 array<Color, SIDE_COUNT + 3> colors = { WHITE, GREEN, RED, YELLOW, BLUE, ORANGE, BLACK, LIGHTGRAY, ColorAlpha(LIGHTGRAY, 0.5f) };
 
 // Маленький зазор (между кусочком и стикером)
-const float TINY_OFFSET = 0.001f;
+const float TINY_OFFSET = 0.01f;
 
 // Размер меша стикера
 float STICKER_SIZE = 0.9f;
@@ -92,7 +92,7 @@ const float DEFAULT_LAYOUT_OFFSET = 0.02f;
 const int BUTTON_COLOR = SIDE_COUNT + 2;
 
 // Размер шрифта
-const float FONT_SIZE = 36.0f;
+const float FONT_SIZE = 48.0f;
 
 // Индекс цвета шрифта из массива цветов
 const int FONT_COLOR = SIDE_COUNT;
@@ -100,11 +100,24 @@ const int FONT_COLOR = SIDE_COUNT;
 // Используемый шрифт
 Font font;
 
+// Шрифт для символов
+Font symbolFont;
+
 // Индекс надписи с количеством ходов
 const int LABEL_MOVE_COUNT = 0;
 
 // Индекс надписи с состоянием кубика Рубика (собран/нет)
 const int LABEL_SOLVED = 1;
+
+char TEXT_SOLVED[] = "\xD0\xA1\xD0\xBE\xD0\xB1\xD1\x80\xD0\xB0\xD0\xBD";
+
+char TEXT_MOVES[] = "\xD0\xA5\xD0\xBE\xD0\xB4\xD0\xBE\xD0\xB2\x3A\x20%i";
+
+char TEXT_HORIZONTAL[] = "\xD0\x93\xD0\xBE\xD1\x80\xD0\xB8\xD0\xB7\xD0\xBE\xD0\xBD\xD1\x82\xD0\xB0\xD0\xBB\xD1\x8C\xD0\xBD\xD0\xBE";
+
+char TEXT_VERTICAL_1[] = "\xD0\x92\xD0\xB5\xD1\x80\xD1\x82\xD0\xB8\xD0\xBA\xD0\xB0\xD0\xBB\xD1\x8C\xD0\xBD\xD0\xBE\x20\x31";
+
+char TEXT_VERTICAL_2[] = "\xD0\x92\xD0\xB5\xD1\x80\xD1\x82\xD0\xB8\xD0\xBA\xD0\xB0\xD0\xBB\xD1\x8C\xD0\xBD\xD0\xBE\x20\x32";
 
 void initData()
 {
@@ -128,5 +141,15 @@ void initData()
         CAMERA_ORTHOGRAPHIC
     };
 
-    font = GetFontDefault();
+    vector<int> codepoints(0x0FCC + 1);
+    for (int i = 0; i <= 0x0FCC; ++i) {
+        codepoints[i] = i;
+    }
+    font = LoadFontEx("assets/font/l_10646.ttf", FONT_SIZE, codepoints.data(), codepoints.size());
+
+    vector<int> symbolCodepoints(0xF8CC - 0xE001 + 1);
+    for (int i = 0xE001; i <= 0xF8CC; i++) {
+        symbolCodepoints[i - 0xE001] = i;
+    }
+    symbolFont = LoadFontEx("assets/font/SegoeIcons.ttf", FONT_SIZE, symbolCodepoints.data(), symbolCodepoints.size());
 }

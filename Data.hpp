@@ -135,6 +135,9 @@ extern const int FONT_COLOR;
 // Используемый шрифт
 extern Font font;
 
+// Шрифт для символов
+extern Font symbolFont;
+
 // Количество кнопок
 const int BUTTON_COUNT = 11;
 
@@ -146,6 +149,16 @@ extern const int LABEL_MOVE_COUNT;
 
 // Индекс надписи с состоянием кубика Рубика (собран/нет)
 extern const int LABEL_SOLVED;
+
+extern char TEXT_SOLVED[];
+
+extern char TEXT_MOVES[];
+
+extern char TEXT_HORIZONTAL[];
+
+extern char TEXT_VERTICAL_1[];
+
+extern char TEXT_VERTICAL_2[];
 
 // ------------ Функции ---------------
 

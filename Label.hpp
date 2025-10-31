@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "Data.hpp"
 
@@ -11,38 +11,41 @@ enum LayoutConstraint {
 
 class Label {
 public:
-    // Конструктор по умолчанию
+    // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
     Label();
 
-    // Конструктор
-    Label(LayoutConstraint labelConstraint, float offsetX, float offsetY, string text);
+    // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+    Label(LayoutConstraint labelConstraint, float offsetX, float offsetY, string text, bool symbols = false);
 
-    // Конструктор
-    Label(LayoutConstraint labelConstraint, float width, float height, float offsetX, float offsetY, string text);
+    // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+    Label(LayoutConstraint labelConstraint, float width, float height, float offsetX, float offsetY, string text, bool symbols = false);
 
-    // Метод для отрисовки надписи
+    // РњРµС‚РѕРґ РґР»СЏ РѕС‚СЂРёСЃРѕРІРєРё РЅР°РґРїРёСЃРё
     void draw(int screenWidth, int screenHeight);
 
-    // Метод для получения границ надписи
+    // РњРµС‚РѕРґ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РіСЂР°РЅРёС† РЅР°РґРїРёСЃРё
     Rectangle getRectangle(int screenWidth, int screenHeight);
 
-    // Метод для установки текста
+    // РњРµС‚РѕРґ РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё С‚РµРєСЃС‚Р°
     void setText(string text);
 
 protected:
-    // Положение надписи
+    // РџРѕР»РѕР¶РµРЅРёРµ РЅР°РґРїРёСЃРё
     LayoutConstraint constraint;
 
-    // Ширина надписи (0..1) относительно ширины окна
+    // РЁРёСЂРёРЅР° РЅР°РґРїРёСЃРё (0..1) РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ С€РёСЂРёРЅС‹ РѕРєРЅР°
     float width;
-    // Высота надписи (0..1) относительно высота окна
+    // Р’С‹СЃРѕС‚Р° РЅР°РґРїРёСЃРё (0..1) РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РІС‹СЃРѕС‚Р° РѕРєРЅР°
     float height;
 
-    // Смещение по X надписи (0..1) относительно ширины окна
+    // РЎРјРµС‰РµРЅРёРµ РїРѕ X РЅР°РґРїРёСЃРё (0..1) РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ С€РёСЂРёРЅС‹ РѕРєРЅР°
     float offsetX;
-    // Смещение по Y надписи (0..1) относительно высота окна
+    // РЎРјРµС‰РµРЅРёРµ РїРѕ Y РЅР°РґРїРёСЃРё (0..1) РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РІС‹СЃРѕС‚Р° РѕРєРЅР°
     float offsetY;
 
-    // Текст надписи
+    // РўРµРєСЃС‚ РЅР°РґРїРёСЃРё
     string text;
+
+    // РўРµРєСЃС‚ СЃРѕСЃС‚РѕРёС‚ РёР· СЃРёРјРІРѕР»РѕРІ
+    bool symbols;
 };

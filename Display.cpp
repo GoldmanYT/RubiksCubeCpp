@@ -15,6 +15,8 @@ void display()
 
     EndMode3D();
 
+    updateLabels();
+
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
@@ -30,6 +32,7 @@ void display()
 
 void init()
 {
+    SetConfigFlags(FLAG_MSAA_4X_HINT);
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "");
     SetWindowState(FLAG_WINDOW_RESIZABLE);
 
@@ -64,10 +67,7 @@ void setHotkeys()
         keyboardCallbacks.push_back(KeyboardCallback { key + KEY_KP_1, key, selectRowIndex });
     }
 
-    auto rotate = [](int direction) {
-        rubiksCubeModel.rotate(direction);
-        updateLabels();
-    };
+    auto rotate = [](int direction) { rubiksCubeModel.rotate(direction); };
 
     keyboardCallbacks.push_back(KeyboardCallback { KEY_SPACE, true, rotate });
     keyboardCallbacks.push_back(KeyboardCallback { KEY_LEFT_SHIFT, false, rotate });
@@ -80,28 +80,16 @@ void setHotkeys()
     keyboardCallbacks.push_back(KeyboardCallback { KEY_RIGHT, 0, nextRowIndex });
     keyboardCallbacks.push_back(KeyboardCallback { KEY_LEFT, 0, previousRowIndex });
 
-    auto scramble = [](int) {
-        rubiksCubeModel.scramble();
-        updateLabels();
-    };
+    auto scramble = [](int) { rubiksCubeModel.scramble(); };
 
     keyboardCallbacks.push_back(KeyboardCallback { KEY_BACKSPACE, 0, scramble });
 
-    auto solve = [](int) {
-        rubiksCubeModel.solve();
-        updateLabels();
-    };
+    auto solve = [](int) { rubiksCubeModel.solve(); };
 
     keyboardCallbacks.push_back(KeyboardCallback { KEY_ENTER, 0, solve });
 
-    auto increaseSize = [](int) {
-        rubiksCubeModel.increaseSize();
-        updateLabels();
-    };
-    auto decreaseSize = [](int) {
-        rubiksCubeModel.decreaseSize();
-        updateLabels();
-    };
+    auto increaseSize = [](int) { rubiksCubeModel.increaseSize(); };
+    auto decreaseSize = [](int) { rubiksCubeModel.decreaseSize(); };
 
     keyboardCallbacks.push_back(KeyboardCallback { KEY_EQUAL, 0, increaseSize });
     keyboardCallbacks.push_back(KeyboardCallback { KEY_KP_ADD, 0, increaseSize });
@@ -112,62 +100,62 @@ void setHotkeys()
     buttons[i] = Button(
         TOP_LEFT,
         DEFAULT_LAYOUT_OFFSET, DEFAULT_LAYOUT_OFFSET,
-        "Solve", 0, solve);
+        "\xEE\xA2\xA9", 0, solve, true);
     buttons[++i] = Button(
         TOP_LEFT,
         DEFAULT_LAYOUT_OFFSET, 2 * DEFAULT_LAYOUT_OFFSET + DEFAULT_LAYOUT_HEIGHT,
-        "Scramble", 0, scramble);
+        "\xEE\xB2\xA5", 0, scramble, true);
 
     buttons[++i] = Button(
         TOP_RIGHT,
         DEFAULT_LAYOUT_OFFSET, DEFAULT_LAYOUT_OFFSET,
-        "Increase size", 0, increaseSize);
+        "\xEE\x87\x99", 0, increaseSize, true);
     buttons[++i] = Button(
         TOP_RIGHT,
         DEFAULT_LAYOUT_OFFSET, 2 * DEFAULT_LAYOUT_OFFSET + DEFAULT_LAYOUT_HEIGHT,
-        "Decrease size", 0, decreaseSize);
+        "\xEE\x87\x98", 0, decreaseSize, true);
 
     buttons[++i] = Button(
         BOTTOM_RIGHT,
         DEFAULT_LAYOUT_OFFSET, 2 * DEFAULT_LAYOUT_OFFSET + DEFAULT_LAYOUT_HEIGHT,
-        "Clockwise", true, rotate);
+        "\xEE\x9C\xAC", true, rotate, true);
     buttons[++i] = Button(
         BOTTOM_RIGHT,
         DEFAULT_LAYOUT_OFFSET, DEFAULT_LAYOUT_OFFSET,
-        "Counterclockwise", false, rotate);
+        "\xEE\x9D\xB7", false, rotate, true);
     buttons[++i] = Button(
         BOTTOM_RIGHT,
         2 * DEFAULT_LAYOUT_OFFSET + DEFAULT_LAYOUT_WIDTH, 2 * DEFAULT_LAYOUT_OFFSET + DEFAULT_LAYOUT_HEIGHT,
-        "+", 0, nextRowIndex);
+        "\xEE\x80\x90", 0, nextRowIndex, true);
     buttons[++i] = Button(
         BOTTOM_RIGHT,
         2 * DEFAULT_LAYOUT_OFFSET + DEFAULT_LAYOUT_WIDTH, DEFAULT_LAYOUT_OFFSET,
-        "-", 0, previousRowIndex);
+        "\xEE\x80\x91", 0, previousRowIndex, true);
 
     buttons[++i] = Button(
         BOTTOM_LEFT,
         DEFAULT_LAYOUT_OFFSET, 3 * DEFAULT_LAYOUT_OFFSET + 2 * DEFAULT_LAYOUT_HEIGHT,
-        "ZOX", ZOX, selectPlane);
+        TEXT_HORIZONTAL, ZOX, selectPlane);
     buttons[++i] = Button(
         BOTTOM_LEFT,
         DEFAULT_LAYOUT_OFFSET, 2 * DEFAULT_LAYOUT_OFFSET + DEFAULT_LAYOUT_HEIGHT,
-        "XOY", XOY, selectPlane);
+        TEXT_VERTICAL_1, XOY, selectPlane);
     buttons[++i] = Button(
         BOTTOM_LEFT,
         DEFAULT_LAYOUT_OFFSET, DEFAULT_LAYOUT_OFFSET,
-        "YOZ", YOZ, selectPlane);
+        TEXT_VERTICAL_2, YOZ, selectPlane);
 
     i = 0;
     labels[i] = Label(
         TOP_LEFT,
         1.0f - 2 * DEFAULT_LAYOUT_OFFSET, DEFAULT_LAYOUT_HEIGHT,
         DEFAULT_LAYOUT_OFFSET, DEFAULT_LAYOUT_OFFSET,
-        "Moves: 0");
+        TextFormat(TEXT_MOVES, 0));
     labels[++i] = Label(
         TOP_RIGHT,
         1.0f - 2 * DEFAULT_LAYOUT_OFFSET, DEFAULT_LAYOUT_HEIGHT,
         DEFAULT_LAYOUT_OFFSET, 2 * DEFAULT_LAYOUT_OFFSET + DEFAULT_LAYOUT_HEIGHT,
-        "Solved");
+        TEXT_SOLVED);
 }
 
 void updateLabels()
@@ -175,6 +163,6 @@ void updateLabels()
     int moveCount = rubiksCubeModel.getMoveCount();
     bool solved = rubiksCubeModel.isSolved();
 
-    labels[LABEL_MOVE_COUNT].setText(TextFormat("Moves: %i", moveCount));
-    labels[LABEL_SOLVED].setText(solved ? "Solved" : "");
+    labels[LABEL_MOVE_COUNT].setText(TextFormat(TEXT_MOVES, moveCount));
+    labels[LABEL_SOLVED].setText(solved ? TEXT_SOLVED : "");
 }

@@ -9,10 +9,10 @@ public:
     Button();
 
     // Конструктор
-    Button(LayoutConstraint buttonConstraint, float offsetX, float offsetY, string text);
+    Button(LayoutConstraint buttonConstraint, float offsetX, float offsetY, string text, bool symbols = false);
 
     // Конструктор
-    Button(LayoutConstraint buttonConstraint, float offsetX, float offsetY, string text, int param, void (*callback)(int));
+    Button(LayoutConstraint buttonConstraint, float offsetX, float offsetY, string text, int param, void (*callback)(int), bool symbols = false);
 
     // Метод для отрисовки кнопки
     void draw(int screenWidth, int screenHeight);
