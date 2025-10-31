@@ -12,6 +12,12 @@ Camera camera;
 // Размер кубика Рубика по умолчанию
 const int DEFAULT_SIZE = 3;
 
+// Максимальный размер кубика Рубика
+const int MAX_SIZE = 25;
+
+// Минимальный размер кубика Рубика
+const int MIN_SIZE = 2;
+
 // Логика выбора направления вращения в зависимости от стороны
 //  false - поведение совпадает с принятым по умолчанию
 //  true  - поведение противоположно принятому по умолчанию
@@ -38,7 +44,7 @@ int ROTATION_SIDE[3][2] = {
 };
 
 // Цвета, используемые для материалов
-array<Color, SIDE_COUNT + 2> colors = { WHITE, GREEN, RED, YELLOW, BLUE, ORANGE, BLACK, LIGHTGRAY };
+array<Color, SIDE_COUNT + 3> colors = { WHITE, GREEN, RED, YELLOW, BLUE, ORANGE, BLACK, LIGHTGRAY, ColorAlpha(LIGHTGRAY, 0.5f) };
 
 // Маленький зазор (между кусочком и стикером)
 const float TINY_OFFSET = 0.001f;
@@ -74,19 +80,22 @@ int COUNT_MARGINS = 3;
 const int ROTATION_COUNT_K = 10;
 
 // Ширина кнопки по умолчанию
-const float DEFAULT_BUTTON_WIDTH = 1.0f / 3.0f;
+const float DEFAULT_BUTTON_WIDTH = 1.0f / 4.0f;
 
 // Высота кнопки по умолчанию
 const float DEFAULT_BUTTON_HEIGHT = 1.0f / 10.0f;
 
 // Отступ кнопки от краёв экрана
-const int BUTTON_OFFSET = 10;
+const float DEFAULT_BUTTON_OFFSET = 0.02f;
 
 // Индекс цвета кнопки из массива цветов
-const int BUTTON_COLOR = SIDE_COUNT + 1;
+const int BUTTON_COLOR = SIDE_COUNT + 2;
 
 // Размер шрифта
-const float FONT_SIZE = 48.0f;
+const float FONT_SIZE = 36.0f;
+
+// Индекс цвета шрифта из массива цветов
+const int FONT_COLOR = SIDE_COUNT;
 
 // Используемый шрифт
 Font font;
@@ -109,7 +118,7 @@ void initData()
         { DEFAULT_SIZE * 3.0f, DEFAULT_SIZE * 3.0f, DEFAULT_SIZE * 3.0f },
         { 0.0f, 0.0f, 0.0f },
         { 0.0f, 1.0f, 0.0f },
-        DEFAULT_SIZE * 2.0f,
+        DEFAULT_SIZE * 3.0f,
         CAMERA_ORTHOGRAPHIC
     };
 

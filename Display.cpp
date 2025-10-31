@@ -14,9 +14,15 @@ void display()
     // DrawGrid(4, 1);
 
     rubiksCubeModel.draw();
-    rubiksCubeModel.update();
 
     EndMode3D();
+
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+    for (Button& button : buttons) {
+        button.draw(screenWidth, screenHeight);
+    }
+
     EndDrawing();
 }
 
@@ -76,4 +82,61 @@ void setHotkeys()
     auto solve = [](int) { rubiksCubeModel.solve(); };
 
     keyboardCallbacks.push_back(KeyboardCallback { KEY_ENTER, 0, solve });
+
+    auto increaseSize = [](int) { rubiksCubeModel.increaseSize(); };
+    auto decreaseSize = [](int) { rubiksCubeModel.decreaseSize(); };
+
+    keyboardCallbacks.push_back(KeyboardCallback { KEY_EQUAL, 0, increaseSize });
+    keyboardCallbacks.push_back(KeyboardCallback { KEY_KP_ADD, 0, increaseSize });
+    keyboardCallbacks.push_back(KeyboardCallback { KEY_MINUS, 0, decreaseSize });
+    keyboardCallbacks.push_back(KeyboardCallback { KEY_KP_SUBTRACT, 0, decreaseSize });
+
+    int i = 0;
+    buttons[i] = Button(
+        TOP_LEFT,
+        DEFAULT_BUTTON_OFFSET, DEFAULT_BUTTON_OFFSET,
+        "Solve", 0, solve);
+    buttons[++i] = Button(
+        TOP_LEFT,
+        DEFAULT_BUTTON_OFFSET, 2 * DEFAULT_BUTTON_OFFSET + DEFAULT_BUTTON_HEIGHT,
+        "Scramble", 0, scramble);
+
+    buttons[++i] = Button(
+        TOP_RIGHT,
+        DEFAULT_BUTTON_OFFSET, DEFAULT_BUTTON_OFFSET,
+        "Increase size", 0, increaseSize);
+    buttons[++i] = Button(
+        TOP_RIGHT,
+        DEFAULT_BUTTON_OFFSET, 2 * DEFAULT_BUTTON_OFFSET + DEFAULT_BUTTON_HEIGHT,
+        "Decrease size", 0, decreaseSize);
+
+    buttons[++i] = Button(
+        BOTTOM_RIGHT,
+        DEFAULT_BUTTON_OFFSET, 2 * DEFAULT_BUTTON_OFFSET + DEFAULT_BUTTON_HEIGHT,
+        "Clockwise", true, rotate);
+    buttons[++i] = Button(
+        BOTTOM_RIGHT,
+        DEFAULT_BUTTON_OFFSET, DEFAULT_BUTTON_OFFSET,
+        "Counterclockwise", false, rotate);
+    buttons[++i] = Button(
+        BOTTOM_RIGHT,
+        2 * DEFAULT_BUTTON_OFFSET + DEFAULT_BUTTON_WIDTH, 2 * DEFAULT_BUTTON_OFFSET + DEFAULT_BUTTON_HEIGHT,
+        "+", 0, nextRowIndex);
+    buttons[++i] = Button(
+        BOTTOM_RIGHT,
+        2 * DEFAULT_BUTTON_OFFSET + DEFAULT_BUTTON_WIDTH, DEFAULT_BUTTON_OFFSET,
+        "-", 0, previousRowIndex);
+
+    buttons[++i] = Button(
+        BOTTOM_LEFT,
+        DEFAULT_BUTTON_OFFSET, 3 * DEFAULT_BUTTON_OFFSET + 2 * DEFAULT_BUTTON_HEIGHT,
+        "ZOX", ZOX, selectPlane);
+    buttons[++i] = Button(
+        BOTTOM_LEFT,
+        DEFAULT_BUTTON_OFFSET, 2 * DEFAULT_BUTTON_OFFSET + DEFAULT_BUTTON_HEIGHT,
+        "XOY", XOY, selectPlane);
+    buttons[++i] = Button(
+        BOTTOM_LEFT,
+        DEFAULT_BUTTON_OFFSET, DEFAULT_BUTTON_OFFSET,
+        "YOZ", YOZ, selectPlane);
 }

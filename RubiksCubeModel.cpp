@@ -22,6 +22,7 @@ void RubiksCubeModel::reset(int size)
     rubiksCube = RubiksCube(size);
     selectedRow.size = size;
     selectedRow.selectedRowIndex = 0;
+    scrambler = Scrambler(size);
 
     for (int side = 0; side < SIDE_COUNT; ++side) {
         stickers[side].resize(size);
@@ -50,6 +51,14 @@ void RubiksCubeModel::reset(int size)
     }
     selectedRow.selectedPlane = ZOX;
     selectedRow.selectedRowIndex = 0;
+
+    camera = Camera {
+        { size * 3.0f, size * 3.0f, size * 3.0f },
+        { 0.0f, 0.0f, 0.0f },
+        { 0.0f, 1.0f, 0.0f },
+        size * 3.0f,
+        CAMERA_ORTHOGRAPHIC
+    };
 }
 
 void RubiksCubeModel::updateStickers()
@@ -138,6 +147,16 @@ void RubiksCubeModel::solve()
 {
     rubiksCube.solve();
     updateStickers();
+}
+
+void RubiksCubeModel::increaseSize()
+{
+    reset(min(MAX_SIZE, size + 1));
+}
+
+void RubiksCubeModel::decreaseSize()
+{
+    reset(max(MIN_SIZE, size - 1));
 }
 
 SelectedRow::SelectedRow(int size)

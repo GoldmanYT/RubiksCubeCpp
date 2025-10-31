@@ -20,6 +20,12 @@ extern const int WINDOW_HEIGHT;
 // Размер кубика Рубика по умолчанию
 extern const int DEFAULT_SIZE;
 
+// Максимальный размер кубика Рубика
+extern const int MAX_SIZE;
+
+// Минимальный размер кубика Рубика
+extern const int MIN_SIZE;
+
 // Используемая камера
 extern Camera camera;
 
@@ -73,7 +79,7 @@ extern RotationData ROTATION_SIDES[3];
 extern int ROTATION_SIDE[3][2];
 
 // Цвета, используемые для материалов
-extern array<Color, SIDE_COUNT + 2> colors;
+extern array<Color, SIDE_COUNT + 3> colors;
 
 // Маленький зазор (между кусочком и стикером)
 extern const float TINY_OFFSET;
@@ -114,14 +120,23 @@ extern const float DEFAULT_BUTTON_WIDTH;
 // Высота кнопки по умолчанию
 extern const float DEFAULT_BUTTON_HEIGHT;
 
-// Отступ кнопки от краёв экрана
-extern const int BUTTON_OFFSET;
+// Отступ кнопки от краёв экрана по умолчанию
+extern const float DEFAULT_BUTTON_OFFSET;
+
+// Индекс цвета кнопки из массива цветов
+extern const int BUTTON_COLOR;
 
 // Размер шрифта
 extern const float FONT_SIZE;
 
+// Индекс цвета шрифта из массива цветов
+extern const int FONT_COLOR;
+
 // Используемый шрифт
-Font font;
+extern Font font;
+
+// Количество кнопок
+const int BUTTON_COUNT = 11;
 
 // ------------ Функции ---------------
 
