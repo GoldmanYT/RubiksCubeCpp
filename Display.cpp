@@ -3,7 +3,9 @@
 
 void display()
 {
-    UpdateCamera(&camera, CAMERA_THIRD_PERSON);
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        UpdateCamera(&camera, CAMERA_THIRD_PERSON);
+    }
 
     ClearBackground(SKYBLUE);
     BeginDrawing();
@@ -12,6 +14,7 @@ void display()
     // DrawGrid(4, 1);
 
     rubiksCubeModel.draw();
+    rubiksCubeModel.update();
 
     EndMode3D();
     EndDrawing();

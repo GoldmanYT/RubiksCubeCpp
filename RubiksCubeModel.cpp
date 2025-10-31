@@ -196,7 +196,6 @@ void SelectedRow::draw()
         rotation);
 
     DrawMesh(selectedRowMesh, materials[SELECTED_ROW_MATERIAL], transform);
-    update();
 }
 
 void SelectedRow::update()
@@ -396,6 +395,12 @@ void RubiksCubeModel::draw()
 
     // Отрисовка выбранной "полоски"
     selectedRow.draw();
+}
+
+void RubiksCubeModel::update()
+{
+    // Обновление выбранной "полоски"
+    selectedRow.update();
 
     // Обновление замешивателя кубика Рубика
     scrambler.update(*this, selectedRow);
