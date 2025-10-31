@@ -11,10 +11,10 @@
 
 using namespace std;
 
-// Ширина окна
+// Начальная ширина окна
 extern const int WINDOW_WIDTH;
 
-// Высота окна
+// Начальная высота окна
 extern const int WINDOW_HEIGHT;
 
 // Размер кубика Рубика по умолчанию
@@ -84,11 +84,13 @@ extern float STICKER_SIZE;
 // Меш для стикера
 extern Mesh stickerMesh;
 
+// Размер кусочка
 extern float PIECE_SIZE;
 
 // Индекс материала куба из массива материалов
 extern const int CUBE_MATERIAL;
 
+// Меш выбранного кусочка
 extern Mesh pieceMesh;
 
 // Материалы стикеров и самого кубика
@@ -105,6 +107,21 @@ extern int COUNT_MARGINS;
 
 // Коэффициент количества вращений при запутывании
 extern const int ROTATION_COUNT_K;
+
+// Ширина кнопки по умолчанию
+extern const float DEFAULT_BUTTON_WIDTH;
+
+// Высота кнопки по умолчанию
+extern const float DEFAULT_BUTTON_HEIGHT;
+
+// Отступ кнопки от краёв экрана
+extern const int BUTTON_OFFSET;
+
+// Размер шрифта
+extern const float FONT_SIZE;
+
+// Используемый шрифт
+Font font;
 
 // ------------ Функции ---------------
 
