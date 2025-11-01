@@ -29,8 +29,10 @@ void display()
 void init()
 {
     SetConfigFlags(FLAG_MSAA_4X_HINT);
-    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "");
+    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Rubik's Cube");
+#ifdef DESKTOP
     SetWindowState(FLAG_WINDOW_RESIZABLE);
+#endif
     rlSetClipPlanes(sqrt(3.0), 6.0);
 
     initData();

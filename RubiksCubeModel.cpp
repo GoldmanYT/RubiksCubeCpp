@@ -57,14 +57,6 @@ void RubiksCubeModel::reset(int size)
 
     pieceSize = PIECE_SIZE_K / size;
     stickerSize = STICKER_SIZE_K / size;
-
-    // camera = Camera {
-    //     { size * 3.0f, size * 3.0f, size * 3.0f },
-    //     { 0.0f, 0.0f, 0.0f },
-    //     { 0.0f, 1.0f, 0.0f },
-    //     size * 3.0f,
-    //     CAMERA_ORTHOGRAPHIC
-    // };
 }
 
 void RubiksCubeModel::updateStickers()
@@ -234,11 +226,9 @@ void SelectedRow::draw()
         break;
     }
 
-    Matrix transform = MatrixMultiply(
-        MatrixMultiply(
-            MatrixScale(scaleX, scaleY, scaleZ),
-            MatrixTranslate(offsetX, offsetY, offsetZ)),
-        rotation);
+    Matrix scale = MatrixScale(scaleX, scaleY, scaleZ);
+    Matrix translate = MatrixTranslate(offsetX, offsetY, offsetZ);
+    Matrix transform = scale * translate * rotation;
 
     DrawMesh(selectedRowMesh, materials[SELECTED_ROW_MATERIAL], transform);
 }
@@ -336,11 +326,7 @@ Matrix RubiksCubeModel::getStickerTransform(int side, int x, int y)
         }
     }
 
-    return MatrixMultiply(
-        MatrixMultiply(
-            MatrixMultiply(scale, rotation),
-            translation),
-        rotation2);
+    return scale * rotation * translation * rotation2;
 }
 
 bool RubiksCubeModel::isStickerRotated(int side, int x, int y)
@@ -401,7 +387,7 @@ Matrix RubiksCubeModel::getPieceTransform(int x, int y, int z)
         }
     }
 
-    return MatrixMultiply(MatrixMultiply(scale, translate), rotation);
+    return scale * translate * rotation;
 }
 
 bool RubiksCubeModel::isPieceRotated(int x, int y, int z)

@@ -1,15 +1,13 @@
 ﻿#include "Data.hpp"
 
-// #define MOBILE
-
-#ifdef MOBILE
+#ifndef DESKTOP
 // Начальная ширина окна
 const int WINDOW_WIDTH = 1080;
 #else
 const int WINDOW_WIDTH = 1024;
 #endif
 
-#ifdef MOBILE
+#ifndef DESKTOP
 // Начальная высота окна
 const int WINDOW_HEIGHT = 1920;
 #else

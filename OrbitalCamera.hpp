@@ -7,9 +7,6 @@ public:
     // Конструктор по умолчанию
     OrbitalCamera();
 
-    // Метод для изменения положения по размеру кубика Рубика
-    void reset();
-
     // Метод для пересчёта позиции
     void recalculatePosition();
 
@@ -28,6 +25,9 @@ private:
 
     // Расстояние до точки (0, 0, 0)
     float radius;
+
+    // Нажата ли ЛКМ
+    bool mouseDown;
 
     // Чувствительность камеры по оси X
     const float SENSIVITY_X = 0.005f;

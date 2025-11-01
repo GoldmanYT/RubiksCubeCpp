@@ -136,6 +136,7 @@
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Label.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OrbitalCamera.cpp" />
     <ClCompile Include="RubiksCube.cpp" />
     <ClCompile Include="RubiksCubeModel.cpp" />
     <ClCompile Include="Simulation.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="Data.hpp" />
     <ClInclude Include="Display.hpp" />
     <ClInclude Include="Label.hpp" />
+    <ClInclude Include="OrbitalCamera.hpp" />
     <ClInclude Include="RubiksCube.hpp" />
     <ClInclude Include="RubiksCubeModel.hpp" />
     <ClInclude Include="Simulation.hpp" />

@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+// #define DESKTOP
+
 #include <array>
 #include <iostream>
 #include <memory>
