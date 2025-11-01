@@ -3,13 +3,9 @@
 
 void display()
 {
-    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-        UpdateCamera(&camera, CAMERA_THIRD_PERSON);
-    }
-
     ClearBackground(SKYBLUE);
     BeginDrawing();
-    BeginMode3D(camera);
+    camera.beginMode3D();
 
     rubiksCubeModel.draw();
 
@@ -35,6 +31,7 @@ void init()
     SetConfigFlags(FLAG_MSAA_4X_HINT);
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "");
     SetWindowState(FLAG_WINDOW_RESIZABLE);
+    rlSetClipPlanes(sqrt(3.0), 6.0);
 
     initData();
     setHotkeys();

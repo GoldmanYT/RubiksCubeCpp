@@ -6,6 +6,8 @@ vector<KeyboardCallback> keyboardCallbacks;
 array<Button, BUTTON_COUNT> buttons;
 array<Label, LABEL_COUNT> labels;
 
+OrbitalCamera camera;
+
 void simulation()
 {
     for (KeyboardCallback& callback : keyboardCallbacks) {
@@ -14,6 +16,7 @@ void simulation()
         }
     }
 
+    camera.update();
     rubiksCubeModel.update();
 
     bool isMousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);

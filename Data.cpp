@@ -1,10 +1,20 @@
 ﻿#include "Data.hpp"
 
-// Начальная ширина окна
-const int WINDOW_WIDTH = 1024;
+#define MOBILE
 
+#ifdef MOBILE
+// Начальная ширина окна
+const int WINDOW_WIDTH = 1080;
+#else
+const int WINDOW_WIDTH = 1024;
+#endif
+
+#ifdef MOBILE
 // Начальная высота окна
+const int WINDOW_HEIGHT = 1920;
+#else
 const int WINDOW_HEIGHT = 768;
+#endif
 
 // Используемая камера
 Camera camera;
@@ -13,7 +23,7 @@ Camera camera;
 const int DEFAULT_SIZE = 3;
 
 // Максимальный размер кубика Рубика
-const int MAX_SIZE = 25;
+const int MAX_SIZE = 20;
 
 // Минимальный размер кубика Рубика
 const int MIN_SIZE = 2;
@@ -47,16 +57,22 @@ int ROTATION_SIDE[3][2] = {
 array<Color, SIDE_COUNT + 3> colors = { WHITE, GREEN, RED, YELLOW, BLUE, ORANGE, BLACK, LIGHTGRAY, ColorAlpha(LIGHTGRAY, 0.5f) };
 
 // Маленький зазор (между кусочком и стикером)
-const float TINY_OFFSET = 0.01f;
+const float TINY_OFFSET = 0.002f;
 
-// Размер меша стикера
-float STICKER_SIZE = 0.9f;
+// Коэффициент размера меша стикера
+float STICKER_SIZE_K = 0.95f;
+
+// Размер кусочка
+float stickerSize = STICKER_SIZE_K / DEFAULT_SIZE;
 
 // Меш для стикера
 Mesh stickerMesh;
 
+// Коэффициент размера кусочка
+float PIECE_SIZE_K = 1.0f;
+
 // Размер кусочка
-float PIECE_SIZE = 1.0f;
+float pieceSize = PIECE_SIZE_K / DEFAULT_SIZE;
 
 // Индекс материала куба из массива материалов
 const int CUBE_MATERIAL = SIDE_COUNT;
@@ -129,17 +145,9 @@ void initData()
         map.color = colors[colorIndex];
     }
 
-    stickerMesh = GenMeshPlane(STICKER_SIZE, STICKER_SIZE, 1, 1);
-    pieceMesh = GenMeshCube(PIECE_SIZE, PIECE_SIZE, PIECE_SIZE);
+    stickerMesh = GenMeshPlane(STICKER_SIZE_K, STICKER_SIZE_K, 1, 1);
+    pieceMesh = GenMeshCube(PIECE_SIZE_K, PIECE_SIZE_K, PIECE_SIZE_K);
     selectedRowMesh = GenMeshCube(1.0f, 1.0f, 1.0f);
-
-    camera = Camera {
-        { DEFAULT_SIZE * 3.0f, DEFAULT_SIZE * 3.0f, DEFAULT_SIZE * 3.0f },
-        { 0.0f, 0.0f, 0.0f },
-        { 0.0f, 1.0f, 0.0f },
-        DEFAULT_SIZE * 3.0f,
-        CAMERA_ORTHOGRAPHIC
-    };
 
     vector<int> codepoints(0x0FCC + 1);
     for (int i = 0; i <= 0x0FCC; ++i) {

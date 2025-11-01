@@ -8,6 +8,7 @@
 
 #include <raylib.h>
 #include <raymath.h>
+#include <rlgl.h>
 
 using namespace std;
 
@@ -25,9 +26,6 @@ extern const int MAX_SIZE;
 
 // Минимальный размер кубика Рубика
 extern const int MIN_SIZE;
-
-// Используемая камера
-extern Camera camera;
 
 // Количество сторон куба
 const int SIDE_COUNT = 6;
@@ -84,14 +82,20 @@ extern array<Color, SIDE_COUNT + 3> colors;
 // Маленький зазор (между кусочком и стикером)
 extern const float TINY_OFFSET;
 
-// Размер меша стикера
-extern float STICKER_SIZE;
+// Коэффициент размера меша стикера
+extern float STICKER_SIZE_K;
+
+// Размер стикера
+extern float stickerSize;
 
 // Меш для стикера
 extern Mesh stickerMesh;
 
+// Коэффициент размера кусочка
+extern float PIECE_SIZE_K;
+
 // Размер кусочка
-extern float PIECE_SIZE;
+extern float pieceSize;
 
 // Индекс материала куба из массива материалов
 extern const int CUBE_MATERIAL;
