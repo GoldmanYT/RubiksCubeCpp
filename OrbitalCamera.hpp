@@ -30,8 +30,8 @@ private:
     float radius;
 
     // Чувствительность камеры по оси X
-    const float SENSIVITY_X = 0.05f;
+    const float SENSIVITY_X = 0.005f;
 
     // Чувствительность камеры по оси Y
-    const float SENSIVITY_Y = 0.05f;
+    const float SENSIVITY_Y = 0.005f;
 };

@@ -1,6 +1,6 @@
 ﻿#include "Data.hpp"
 
-#define MOBILE
+// #define MOBILE
 
 #ifdef MOBILE
 // Начальная ширина окна
@@ -15,9 +15,6 @@ const int WINDOW_HEIGHT = 1920;
 #else
 const int WINDOW_HEIGHT = 768;
 #endif
-
-// Используемая камера
-Camera camera;
 
 // Размер кубика Рубика по умолчанию
 const int DEFAULT_SIZE = 3;

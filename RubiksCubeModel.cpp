@@ -55,13 +55,16 @@ void RubiksCubeModel::reset(int size)
     selectedRow.selectedPlane = ZOX;
     selectedRow.selectedRowIndex = 0;
 
-    camera = Camera {
-        { size * 3.0f, size * 3.0f, size * 3.0f },
-        { 0.0f, 0.0f, 0.0f },
-        { 0.0f, 1.0f, 0.0f },
-        size * 3.0f,
-        CAMERA_ORTHOGRAPHIC
-    };
+    pieceSize = PIECE_SIZE_K / size;
+    stickerSize = STICKER_SIZE_K / size;
+
+    // camera = Camera {
+    //     { size * 3.0f, size * 3.0f, size * 3.0f },
+    //     { 0.0f, 0.0f, 0.0f },
+    //     { 0.0f, 1.0f, 0.0f },
+    //     size * 3.0f,
+    //     CAMERA_ORTHOGRAPHIC
+    // };
 }
 
 void RubiksCubeModel::updateStickers()
@@ -195,14 +198,14 @@ SelectedRow::SelectedRow(int size)
 
 void SelectedRow::draw()
 {
-    float smallScale = PIECE_SIZE + COUNT_MARGINS * TINY_OFFSET;
-    float bigScale = PIECE_SIZE * size + COUNT_MARGINS * TINY_OFFSET;
+    float smallScale = pieceSize + COUNT_MARGINS * TINY_OFFSET;
+    float bigScale = pieceSize * size + COUNT_MARGINS * TINY_OFFSET;
 
     float scaleX = smallScale;
     float scaleY = smallScale;
     float scaleZ = smallScale;
 
-    float bigOffset = PIECE_SIZE * selectedRowIndex - PIECE_SIZE * (size - 1) / 2;
+    float bigOffset = pieceSize * selectedRowIndex - pieceSize * (size - 1) / 2;
 
     float offsetX = 0.0f;
     float offsetY = 0.0f;
@@ -281,14 +284,15 @@ void SelectedRow::rotate(bool direction)
 
 Matrix RubiksCubeModel::getStickerTransform(int side, int x, int y)
 {
-    float offset = PIECE_SIZE * (size - 1) / 2;
-    float stickerOffset = offset + PIECE_SIZE / 2 + TINY_OFFSET;
-    float offsetX = -offset + x * PIECE_SIZE;
-    float offsetY = -offset + y * PIECE_SIZE;
+    float offset = pieceSize * (size - 1) / 2;
+    float stickerOffset = offset + pieceSize / 2 + TINY_OFFSET;
+    float offsetX = -offset + x * pieceSize;
+    float offsetY = -offset + y * pieceSize;
 
     Matrix rotation = MatrixIdentity();
     Matrix rotation2 = MatrixIdentity();
     Matrix translation = MatrixIdentity();
+    Matrix scale = MatrixScale(stickerSize, stickerSize, stickerSize);
 
     switch (side) {
     case STICKER_WHITE:
@@ -332,7 +336,11 @@ Matrix RubiksCubeModel::getStickerTransform(int side, int x, int y)
         }
     }
 
-    return MatrixMultiply(MatrixMultiply(rotation, translation), rotation2);
+    return MatrixMultiply(
+        MatrixMultiply(
+            MatrixMultiply(scale, rotation),
+            translation),
+        rotation2);
 }
 
 bool RubiksCubeModel::isStickerRotated(int side, int x, int y)
@@ -369,13 +377,14 @@ bool RubiksCubeModel::isStickerRotated(int side, int x, int y)
 
 Matrix RubiksCubeModel::getPieceTransform(int x, int y, int z)
 {
-    float offset = PIECE_SIZE * (size - 1) / 2;
-    float posX = x * PIECE_SIZE - offset;
-    float posY = y * PIECE_SIZE - offset;
-    float posZ = z * PIECE_SIZE - offset;
+    float offset = pieceSize * (size - 1) / 2;
+    float posX = x * pieceSize - offset;
+    float posY = y * pieceSize - offset;
+    float posZ = z * pieceSize - offset;
 
     Matrix translate = MatrixTranslate(posX, posY, posZ);
     Matrix rotation = MatrixIdentity();
+    Matrix scale = MatrixScale(pieceSize, pieceSize, pieceSize);
 
     float angle = selectedRow.angle;
     if (isPieceRotated(x, y, z)) {
@@ -392,7 +401,7 @@ Matrix RubiksCubeModel::getPieceTransform(int x, int y, int z)
         }
     }
 
-    return MatrixMultiply(translate, rotation);
+    return MatrixMultiply(MatrixMultiply(scale, translate), rotation);
 }
 
 bool RubiksCubeModel::isPieceRotated(int x, int y, int z)

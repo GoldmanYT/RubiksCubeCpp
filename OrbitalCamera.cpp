@@ -3,7 +3,14 @@
 OrbitalCamera::OrbitalCamera()
     : angleX(PI / 4)
     , angleY(PI / 4)
-    , radius(sqrt(3.0f))
+    , radius(3 * sqrt(3.0f))
+    , Camera {
+        { 0.0f, 0.0f, 0.0f },
+        { 0.0f, 0.0f, 0.0f },
+        { 0.0f, 1.0f, 0.0f },
+        3.0f,
+        CAMERA_ORTHOGRAPHIC
+    }
 {
     recalculatePosition();
 }
@@ -34,8 +41,12 @@ void OrbitalCamera::update()
 {
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
         Vector2 mouseDelta = GetMouseDelta();
-        angleX += mouseDelta.x * SENSIVITY_X;
-        angleY += mouseDelta.y * SENSIVITY_Y;
+        bool direction = (long long)floor(angleY / acos(-1)) % 2 != 0;
+
+        angleX += mouseDelta.x * SENSIVITY_X * (direction ? -1.0f : 1.0f);
+        angleY -= mouseDelta.y * SENSIVITY_Y;
+        up.y = 1.0f - 2 * direction;
+
         recalculatePosition();
     }
 }
