@@ -1,13 +1,13 @@
 ﻿#include "Data.hpp"
 
-#ifndef DESKTOP
+#ifndef PLATFORM_DESKTOP
 // Начальная ширина окна
 const int WINDOW_WIDTH = 1080;
 #else
 const int WINDOW_WIDTH = 1024;
 #endif
 
-#ifndef DESKTOP
+#ifndef PLATFORM_DESKTOP
 // Начальная высота окна
 const int WINDOW_HEIGHT = 1920;
 #else
@@ -23,18 +23,13 @@ const int MAX_SIZE = 20;
 // Минимальный размер кубика Рубика
 const int MIN_SIZE = 2;
 
-// Логика выбора направления вращения в зависимости от стороны
-//  false - поведение совпадает с принятым по умолчанию
-//  true  - поведение противоположно принятому по умолчанию
-bool ROTATION_DIRECTION[SIDE_COUNT] = { false, true, false, false, true, false };
-
 // Логика выбора соседних сторон в зависимости от плоскости (XOY, YOZ, ZOX):
-//  ROTATION_SIDES[plane]
-//  plane - плоскость вращения грани
-RotationData ROTATION_SIDES[3] = {
-    { false, { STICKER_GREEN, STICKER_ORANGE, STICKER_BLUE, STICKER_RED } },
-    { true, { STICKER_WHITE, STICKER_ORANGE, STICKER_YELLOW, STICKER_RED } },
-    { false, { STICKER_WHITE, STICKER_BLUE, STICKER_YELLOW, STICKER_GREEN } }
+// Стороны, которые меняются во время вращения
+// в порядке их смены (против часовой стрелки)
+int ROTATION_SIDES[3][4] = {
+    { STICKER_GREEN, STICKER_ORANGE, STICKER_BLUE, STICKER_RED },
+    { STICKER_ORANGE, STICKER_WHITE, STICKER_RED, STICKER_YELLOW },
+    { STICKER_WHITE, STICKER_BLUE, STICKER_YELLOW, STICKER_GREEN }
 };
 
 // Выбор грани в зависимости от плоскости (XOY, YOZ, ZOX)
@@ -46,6 +41,16 @@ int ROTATION_SIDE[3][2] = {
     { STICKER_YELLOW, STICKER_WHITE },
     { STICKER_BLUE, STICKER_GREEN },
     { STICKER_ORANGE, STICKER_RED }
+};
+
+// Нормали для каждой из сторон
+Vector3 SIDE_NORMALS[SIDE_COUNT] = {
+    { 0.0f, 1.0f, 0.0f },
+    { 0.0f, 0.0f, 1.0f },
+    { 1.0f, 0.0f, 0.0f },
+    { 0.0f, -1.0f, 0.0f },
+    { 0.0f, 0.0f, -1.0f },
+    { -1.0f, 0.0f, 0.0f }
 };
 
 // Цвета, используемые для материалов
@@ -120,14 +125,19 @@ const int LABEL_MOVE_COUNT = 0;
 // Индекс надписи с состоянием кубика Рубика (собран/нет)
 const int LABEL_SOLVED = 1;
 
+// Текст в кодировке UTF-8 "Собран"
 char TEXT_SOLVED[] = "\xD0\xA1\xD0\xBE\xD0\xB1\xD1\x80\xD0\xB0\xD0\xBD";
 
+// Текст в кодировке UTF-8 "Ходов: %i"
 char TEXT_MOVES[] = "\xD0\xA5\xD0\xBE\xD0\xB4\xD0\xBE\xD0\xB2\x3A\x20%i";
 
+// Текст в кодировке UTF-8 "Горизонтально"
 char TEXT_HORIZONTAL[] = "\xD0\x93\xD0\xBE\xD1\x80\xD0\xB8\xD0\xB7\xD0\xBE\xD0\xBD\xD1\x82\xD0\xB0\xD0\xBB\xD1\x8C\xD0\xBD\xD0\xBE";
 
+// Текст в кодировке UTF-8 "Вертикально 1"
 char TEXT_VERTICAL_1[] = "\xD0\x92\xD0\xB5\xD1\x80\xD1\x82\xD0\xB8\xD0\xBA\xD0\xB0\xD0\xBB\xD1\x8C\xD0\xBD\xD0\xBE\x20\x31";
 
+// Текст в кодировке UTF-8 "Вертикально 2"
 char TEXT_VERTICAL_2[] = "\xD0\x92\xD0\xB5\xD1\x80\xD1\x82\xD0\xB8\xD0\xBA\xD0\xB0\xD0\xBB\xD1\x8C\xD0\xBD\xD0\xBE\x20\x32";
 
 void initData()
@@ -148,11 +158,11 @@ void initData()
     for (int i = 0; i <= 0x0FCC; ++i) {
         codepoints[i] = i;
     }
-    font = LoadFontEx("assets/font/l_10646.ttf", FONT_SIZE, codepoints.data(), codepoints.size());
+    font = LoadFontEx("assets/font/l_10646.ttf", (int)FONT_SIZE, codepoints.data(), (int)codepoints.size());
 
     vector<int> symbolCodepoints(0xF8CC - 0xE001 + 1);
     for (int i = 0xE001; i <= 0xF8CC; i++) {
         symbolCodepoints[i - 0xE001] = i;
     }
-    symbolFont = LoadFontEx("assets/font/SegoeIcons.ttf", FONT_SIZE, symbolCodepoints.data(), symbolCodepoints.size());
+    symbolFont = LoadFontEx("assets/font/SegoeIcons.ttf", (int)FONT_SIZE, symbolCodepoints.data(), (int)symbolCodepoints.size());
 }

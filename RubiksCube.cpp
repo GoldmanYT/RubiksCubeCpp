@@ -50,7 +50,7 @@ void RubiksCube::rotate(CubePlane plane, int rowIndex, bool direction)
                 temp = stickers[side][x][y];
 
                 // по часовой стрелке
-                if (direction != ROTATION_DIRECTION[side]) {
+                if (direction) {
                     swap(indexes[1], indexes[3]);
                 }
 
@@ -65,20 +65,18 @@ void RubiksCube::rotate(CubePlane plane, int rowIndex, bool direction)
     }
 
     for (int columnIndex = 0; columnIndex < size; ++columnIndex) {
-        RotationData rotationData = ROTATION_SIDES[plane];
         pair<int, int> indexes[4];
-        bool indexOrder = rotationData.initialIndex;
-        int* sides = rotationData.sides;
+        int sides[4] = { ROTATION_SIDES[plane][0], ROTATION_SIDES[plane][1], ROTATION_SIDES[plane][2], ROTATION_SIDES[plane][3] };
 
-        for (int sideIndex = 0; sideIndex < 4; ++sideIndex, indexOrder = !indexOrder) {
+        for (int sideIndex = 0; sideIndex < 4; ++sideIndex) {
             if (sideIndex < 2) {
-                if (indexOrder) {
+                if (sideIndex % 2 != 0) {
                     indexes[sideIndex] = { rowIndex, columnIndex };
                 } else {
                     indexes[sideIndex] = { columnIndex, rowIndex };
                 }
             } else {
-                if (indexOrder) {
+                if (sideIndex % 2 != 0) {
                     indexes[sideIndex] = { rowIndex, size - columnIndex - 1 };
                 } else {
                     indexes[sideIndex] = { size - columnIndex - 1, rowIndex };

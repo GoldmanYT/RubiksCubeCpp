@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-// #define DESKTOP
+// #define PLATFORM_ANDROID
+#define PLATFORM_DESKTOP
 
 #include <array>
-#include <iostream>
 #include <memory>
 #include <random>
 #include <vector>
@@ -61,15 +61,10 @@ struct RotationData {
     int sides[4];
 };
 
-// Логика выбора направления вращения в зависимости от стороны
-//  false - поведение совпадает с принятым по умолчанию
-//  true  - поведение противоположно принятому по умолчанию
-extern bool ROTATION_DIRECTION[SIDE_COUNT];
-
 // Логика выбора соседних сторон в зависимости от плоскости (XOY, YOZ, ZOX):
-//  ROTATION_SIDES[plane]
-//  plane - плоскость вращения грани
-extern RotationData ROTATION_SIDES[3];
+// Стороны, которые меняются во время вращения
+// в порядке их смены (против часовой стрелки)
+extern int ROTATION_SIDES[3][4];
 
 // Выбор грани в зависимости от плоскости (XOY, YOZ, ZOX)
 //  ROTATION_SIDE[plane][2]
@@ -77,6 +72,9 @@ extern RotationData ROTATION_SIDES[3];
 //  ROTATION_SIDE[plane][0] - грань, если выбран index = 0
 //  ROTATION_SIDE[plane][1] - грань, если выбран index = size - 1
 extern int ROTATION_SIDE[3][2];
+
+// Нормали для каждой из сторон
+extern Vector3 SIDE_NORMALS[SIDE_COUNT];
 
 // Цвета, используемые для материалов
 extern array<Color, SIDE_COUNT + 3> colors;
@@ -156,14 +154,19 @@ extern const int LABEL_MOVE_COUNT;
 // Индекс надписи с состоянием кубика Рубика (собран/нет)
 extern const int LABEL_SOLVED;
 
+// Текст в кодировке UTF-8 "Собран"
 extern char TEXT_SOLVED[];
 
+// Текст в кодировке UTF-8 "Ходов: %i"
 extern char TEXT_MOVES[];
 
+// Текст в кодировке UTF-8 "Горизонтально"
 extern char TEXT_HORIZONTAL[];
 
+// Текст в кодировке UTF-8 "Вертикально 1"
 extern char TEXT_VERTICAL_1[];
 
+// Текст в кодировке UTF-8 "Вертикально 2"
 extern char TEXT_VERTICAL_2[];
 
 // ------------ Функции ---------------

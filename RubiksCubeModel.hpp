@@ -48,7 +48,7 @@ public:
     float alpha;
 
     // Скорость анимации вращения (рад/с)
-    const float ROTATION_SPEED = 8 * PI;
+    const float ROTATION_SPEED = 6 * PI;
 
     // Направление анимации мигания
     //  false = ++
@@ -76,6 +76,9 @@ public:
 
     // Метод для начала замешивания
     void scramble();
+
+    // Метод для остановки замешивания
+    void stop();
 
     // Метод для обновления состояния замешивания
     void update(RubiksCubeModel& rubiksCubeModel, SelectedRow& selectedRow);
@@ -107,7 +110,7 @@ public:
     void draw();
 
     // Метод для обновления состояния кубика Рубика
-    void update();
+    void update(Camera camera);
 
     // Метод для создания новой модели с заданным размером
     void reset(int size = DEFAULT_SIZE);

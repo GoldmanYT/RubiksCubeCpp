@@ -42,7 +42,7 @@ void Label::draw(int screenWidth, int screenHeight)
 
     DrawTextEx(
         labelFont, text.data(), pos,
-        (int)FONT_SIZE, 0.0f, colors[FONT_COLOR]);
+        FONT_SIZE, 0.0f, colors[FONT_COLOR]);
 }
 
 Rectangle Label::getRectangle(int screenWidth, int screenHeight)

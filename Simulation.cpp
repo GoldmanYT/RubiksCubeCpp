@@ -17,7 +17,7 @@ void simulation()
     }
 
     camera.update();
-    rubiksCubeModel.update();
+    rubiksCubeModel.update(camera);
 
     bool isMousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
     Vector2 mousePos = GetMousePosition();
@@ -31,5 +31,5 @@ void simulation()
 
 void logKeyboardPress(int key)
 {
-    cout << "Pressed key: " << key << endl;
+    TraceLog(LOG_INFO, "Pressed key: %i", key);
 }

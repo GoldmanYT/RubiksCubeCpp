@@ -1,4 +1,4 @@
-#include "OrbitalCamera.hpp"
+﻿#include "OrbitalCamera.hpp"
 
 OrbitalCamera::OrbitalCamera()
     : Camera {
@@ -24,11 +24,6 @@ void OrbitalCamera::recalculatePosition()
         radius * cos(angleY),
         radius * sin(angleY) * sin(angleX)
     };
-}
-
-void OrbitalCamera::beginMode3D()
-{
-    BeginMode3D(static_cast<Camera>(*this));
 }
 
 void OrbitalCamera::update()

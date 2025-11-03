@@ -1,20 +1,20 @@
 ﻿#include "RubiksCubeModel.hpp"
 
 RubiksCubeModel::RubiksCubeModel()
-    : rubiksCube()
-    , size(DEFAULT_SIZE)
+    : size(DEFAULT_SIZE)
+    , moveCount(0)
+    , rubiksCube()
     , selectedRow(DEFAULT_SIZE)
     , scrambler()
-    , moveCount(0)
 {
 }
 
 RubiksCubeModel::RubiksCubeModel(int size)
-    : rubiksCube(size)
-    , size(size)
+    : size(size)
+    , moveCount(0)
+    , rubiksCube(size)
     , selectedRow(size)
     , scrambler(size)
-    , moveCount(0)
 {
 }
 
@@ -97,8 +97,9 @@ void RubiksCubeModel::rotate(bool direction)
     if (!scrambler.isScrambling()) {
         moveCount++;
     }
+    direction ^= selectedRow.selectedRowIndex < size / 2;
     rubiksCube.rotate(selectedRow.selectedPlane, selectedRow.selectedRowIndex, bool(direction));
-    selectedRow.rotate(direction != ROTATION_DIRECTION[selectedRow.selectedPlane]);
+    selectedRow.rotate(direction);
 
     updateStickers();
 }
@@ -120,6 +121,11 @@ Scrambler::Scrambler(int size)
 void Scrambler::scramble()
 {
     rotationCount = 0;
+}
+
+void Scrambler::stop()
+{
+    rotationCount = ROTATION_COUNT;
 }
 
 void Scrambler::update(RubiksCubeModel& rubiksCubeModel, SelectedRow& selectedRow)
@@ -153,6 +159,7 @@ void RubiksCubeModel::scramble()
 void RubiksCubeModel::solve()
 {
     rubiksCube.solve();
+    scrambler.stop();
     updateStickers();
     moveCount = 0;
 }
@@ -344,13 +351,11 @@ bool RubiksCubeModel::isStickerRotated(int side, int x, int y)
     }
 
     bool rotated = rotationSide == side;
-    RotationData rotationData = ROTATION_SIDES[plane];
-    bool indexOrder = rotationData.initialIndex;
-    int* sides = rotationData.sides;
+    int* sides = ROTATION_SIDES[plane];
 
-    for (int sideIndex = 0; sideIndex < 4; ++sideIndex, indexOrder = !indexOrder) {
+    for (int sideIndex = 0; sideIndex < 4; ++sideIndex) {
         if (side == sides[sideIndex]) {
-            if (indexOrder) {
+            if (sideIndex % 2 != 0) {
                 rotated = rowIndex == x;
             } else {
                 rotated = rowIndex == y;
@@ -414,7 +419,11 @@ void RubiksCubeModel::draw()
             for (int z = 0; z < size; ++z) {
                 GraphicObjectData& piece = pieces[x][y][z];
                 piece.transform = getPieceTransform(x, y, z);
-                DrawMesh(pieceMesh, piece.material, piece.transform);
+                bool pieceDraw = x == 0 || x == size - 1 || y == 0 || y == size - 1 || z == 0 || z == size - 1 || isPieceRotated(x, y, z);
+
+                if (pieceDraw) {
+                    DrawMesh(pieceMesh, piece.material, piece.transform);
+                }
             }
         }
     }
@@ -425,6 +434,7 @@ void RubiksCubeModel::draw()
             for (int y = 0; y < size; ++y) {
                 GraphicObjectData& sticker = stickers[side][x][y];
                 sticker.transform = getStickerTransform(side, x, y);
+
                 DrawMesh(stickerMesh, sticker.material, sticker.transform);
             }
         }
@@ -434,11 +444,35 @@ void RubiksCubeModel::draw()
     selectedRow.draw();
 }
 
-void RubiksCubeModel::update()
+void RubiksCubeModel::update(Camera camera)
 {
     // Обновление выбранной "полоски"
     selectedRow.update();
 
     // Обновление замешивателя кубика Рубика
     scrambler.update(*this, selectedRow);
+
+    return; // Заглушка
+
+    for (int side = 0; side < SIDE_COUNT; ++side) {
+        for (int x = 0; x < size; ++x) {
+            for (int y = 0; y < size; ++y) {
+                GraphicObjectData& sticker = stickers[side][x][y];
+
+                float* vertices = stickerMesh.vertices;
+                Vector3 points[4] {};
+                for (int i = 0; i < 4; i++) {
+                    points[i] = { vertices[3 * i], vertices[3 * i + 1], vertices[3 * i + 2] };
+                    points[i] = Vector3Transform(points[i], sticker.transform);
+                }
+
+                Ray viewRay = GetScreenToWorldRay(GetMousePosition(), camera);
+                RayCollision collision = GetRayCollisionQuad(viewRay,
+                    points[0], points[1], points[2], points[3]);
+                if (collision.hit && Vector3DotProduct(SIDE_NORMALS[side], viewRay.direction) < 0.0f) {
+                    sticker.material = materials[CUBE_MATERIAL];
+                }
+            }
+        }
+    }
 }

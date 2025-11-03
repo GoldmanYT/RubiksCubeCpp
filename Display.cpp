@@ -5,7 +5,7 @@ void display()
 {
     ClearBackground(SKYBLUE);
     BeginDrawing();
-    camera.beginMode3D();
+    BeginMode3D((Camera)camera);
 
     rubiksCubeModel.draw();
 
@@ -29,8 +29,12 @@ void display()
 void init()
 {
     SetConfigFlags(FLAG_MSAA_4X_HINT);
+#ifdef PLATFORM_ANDROID
+    InitWindow(0, 0, "Rubik's Cube");
+#else
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Rubik's Cube");
-#ifdef DESKTOP
+#endif
+#ifdef PLATFORM_DESKTOP
     SetWindowState(FLAG_WINDOW_RESIZABLE);
 #endif
     rlSetClipPlanes(sqrt(3.0), 6.0);
