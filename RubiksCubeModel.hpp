@@ -27,6 +27,10 @@ public:
     // Метод для вращения выбранной "полоски"
     void rotate(bool direction);
 
+    // Метод для получения состояния вращения
+    bool isRotating();
+
+public:
     // Размера кубика Рубика
     int size;
 
@@ -97,6 +101,63 @@ private:
     int ROTATION_COUNT;
 };
 
+struct RotationData {
+    // Вращается ли грань
+    bool isRotated;
+
+    // Плоскость вращения (XOY, YOZ, ZOX)
+    CubePlane plane;
+
+    // Номер "полоски" вращения
+    int rowIndex;
+
+    // Направление вращения:
+    //  false - против ЧС
+    //  true  - по ЧС
+    bool direction;
+};
+
+// Класс, хранящий данные о выбранном стикере кубика Рубика
+class SelectedSticker {
+public:
+    // Конструктор по умолчанию
+    SelectedSticker();
+
+    // Метод для выбора соответствующего стикера
+    void select(int side, int x, int y, Ray viewRay);
+
+    // Метод для отмены выбора стикера
+    void deselect();
+
+    // Метод для получения данных о вращении
+    RotationData getRotationData(Ray currentViewRay);
+
+    // Getter для поля selected
+    inline bool getSelected();
+
+private:
+    // Выбран ли стикер
+    bool selected;
+
+    // Произошло ли вращение
+    bool rotated;
+
+    // Сторона стикера
+    int side;
+
+    // Координата 1 стикера
+    int x;
+
+    // Координата 2 стикера
+    int y;
+
+    // Луч от камеры до стикера
+    Ray viewRay;
+
+    // Минимальный угол отклонения, который будет засчитан за вращение
+    const float MIN_ROTATION_DEGREE = 3 * DEG2RAD;
+};
+
 // Класс для представления модели кубика Рубика
 class RubiksCubeModel {
 public:
@@ -110,7 +171,8 @@ public:
     void draw();
 
     // Метод для обновления состояния кубика Рубика
-    void update(Camera camera);
+    // Возвращает true, если мышь находится на кубике
+    bool update(Camera camera, bool isMouseDown, Vector2 mousePos);
 
     // Метод для создания новой модели с заданным размером
     void reset(int size = DEFAULT_SIZE);
@@ -133,7 +195,7 @@ public:
     // Метод для поворота вдоль выбранной плоскости выбранной "полоски" по направлению direction
     //  direction = false => против ЧС
     //  direction = true  => по ЧС
-    void rotate(bool direction);
+    void rotate(bool direction, bool byButton = false);
 
     // Метод, замешивающий кубик Рубика
     void scramble();
@@ -169,15 +231,20 @@ private:
     // Физическое представление кусочков кубика в виде Мешей
     vector<vector<vector<GraphicObjectData>>> pieces;
 
-    // Выбранная полоска
+    // Выбранная "полоска"
+    // Необходим для вращений кнопками
     SelectedRow selectedRow;
 
     // Замешиватель кубика Рубика
     Scrambler scrambler;
 
+    // Выбранный стикер
+    // Необходим для вращений свайпами
+    SelectedSticker selectedSticker;
+
 private:
     // Метод для вращения стикера
-    Matrix getStickerTransform(int side, int x, int y);
+    Matrix getStickerTransform(int side, int x, int y, bool forSwipe = false);
 
     // Метод для определения, вращается ли кусочек
     bool isStickerRotated(int side, int x, int y);

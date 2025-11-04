@@ -32,7 +32,32 @@ extern const int MIN_SIZE;
 // Количество сторон куба
 const int SIDE_COUNT = 6;
 
-// Перечисление всех осей куба
+// Количество плоскостей
+const int PLANE_COUNT = SIDE_COUNT / 2;
+
+// Перечисление выбранного элемента
+enum SelectedElement {
+    SELECTED_NOTHING,
+    SELECTED_BUTTON,
+    SELECTED_CAMERA,
+    SELECTED_STICKER
+};
+
+// Выбранный элемент
+// Необходим для того, чтобы обновлять
+// только те элементы, которые выбраны
+extern SelectedElement selectedElement;
+
+// Режимы вращения кубика Рубика
+enum RotationMode {
+    MODE_SWIPES,
+    MODE_BUTTONS
+};
+
+// Выбранный режим вращения
+extern RotationMode rotationMode;
+
+// Перечисление всех плоскостей куба
 enum CubePlane {
     ZOX,
     XOY,
@@ -49,18 +74,6 @@ enum StickerColor {
     STICKER_ORANGE
 };
 
-// Информация, необходимая для вращения грани
-struct RotationData {
-    // Начальный индекс (который меняется на одной стороне):
-    //  false - из [i0][i1] выбрать i0
-    //  true - из [i0][i1] выбрать i1
-    bool initialIndex;
-
-    // Стороны, которые меняются во время вращения
-    // в порядке их смены (против часовой стрелки)
-    int sides[4];
-};
-
 // Логика выбора соседних сторон в зависимости от плоскости (XOY, YOZ, ZOX):
 // Стороны, которые меняются во время вращения
 // в порядке их смены (против часовой стрелки)
@@ -72,9 +85,6 @@ extern int ROTATION_SIDES[3][4];
 //  ROTATION_SIDE[plane][0] - грань, если выбран index = 0
 //  ROTATION_SIDE[plane][1] - грань, если выбран index = size - 1
 extern int ROTATION_SIDE[3][2];
-
-// Нормали для каждой из сторон
-extern Vector3 SIDE_NORMALS[SIDE_COUNT];
 
 // Цвета, используемые для материалов
 extern array<Color, SIDE_COUNT + 3> colors;
@@ -143,7 +153,7 @@ extern Font font;
 extern Font symbolFont;
 
 // Количество кнопок
-const int BUTTON_COUNT = 11;
+const int BUTTON_COUNT = 12;
 
 // Количество надписей
 const int LABEL_COUNT = 2;
@@ -153,6 +163,9 @@ extern const int LABEL_MOVE_COUNT;
 
 // Индекс надписи с состоянием кубика Рубика (собран/нет)
 extern const int LABEL_SOLVED;
+
+// Индекс кнопки с "Глазом"
+extern int BUTTON_TOGGLE;
 
 // Текст в кодировке UTF-8 "Собран"
 extern char TEXT_SOLVED[];
@@ -168,6 +181,12 @@ extern char TEXT_VERTICAL_1[];
 
 // Текст в кодировке UTF-8 "Вертикально 2"
 extern char TEXT_VERTICAL_2[];
+
+// Текст в кодировке UTF-8 для шрифта символов "Глаз"
+extern char TEXT_SHOW[];
+
+// Текст в кодировке UTF-8 для шрифта символов "Зачёркнутый глаз"
+extern char TEXT_HIDE[];
 
 // ------------ Функции ---------------
 

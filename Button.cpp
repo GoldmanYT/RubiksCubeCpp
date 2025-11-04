@@ -21,6 +21,15 @@ Button::Button(LayoutConstraint buttonConstraint, float offsetX, float offsetY, 
 {
 }
 
+Button::Button(LayoutConstraint buttonConstraint,
+    float width, float height, float offsetX, float offsetY,
+    string text, int param, void (*callback)(int), bool symbols)
+    : Label(buttonConstraint, width, height, offsetX, offsetY, text, symbols)
+    , param(param)
+    , callback(callback)
+{
+}
+
 void Button::draw(int screenWidth, int screenHeight)
 {
     Rectangle rectangle = getRectangle(screenWidth, screenHeight);
@@ -30,10 +39,14 @@ void Button::draw(int screenWidth, int screenHeight)
     Label::draw(screenWidth, screenHeight);
 }
 
-void Button::update(bool isMousePressed, Vector2 mousePos, int screenWidth, int screenHeight)
+bool Button::update(bool isMousePressed, Vector2 mousePos, int screenWidth, int screenHeight)
 {
     Rectangle rectangle = getRectangle(screenWidth, screenHeight);
+
     if (callback != nullptr && isMousePressed && CheckCollisionPointRec(mousePos, rectangle)) {
         callback(param);
+        return true;
     }
+
+    return false;
 }

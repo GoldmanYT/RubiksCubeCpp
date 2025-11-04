@@ -78,3 +78,9 @@ void Label::setText(string text)
 {
     this->text = text;
 }
+
+void Label::setOffset(float offsetX, float offsetY)
+{
+    this->offsetX = offsetX;
+    this->offsetY = offsetY;
+}

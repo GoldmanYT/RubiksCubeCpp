@@ -5,8 +5,8 @@ OrbitalCamera::OrbitalCamera()
         { 0.0f, 0.0f, 0.0f },
         { 0.0f, 0.0f, 0.0f },
         { 0.0f, 1.0f, 0.0f },
-        3.0f,
-        CAMERA_ORTHOGRAPHIC
+        30.0f,
+        CAMERA_PERSPECTIVE
     }
     , angleX(PI / 4)
     , angleY(PI / 4)
@@ -26,9 +26,9 @@ void OrbitalCamera::recalculatePosition()
     };
 }
 
-void OrbitalCamera::update()
+bool OrbitalCamera::update(bool isMouseButtonDown)
 {
-    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+    if (isMouseButtonDown) {
         Vector2 mouseDelta = mouseDown ? GetMouseDelta() : Vector2 { 0.0f, 0.0f };
         bool direction = (long long)floor(angleY / acos(-1)) % 2 != 0;
         mouseDown = true;
@@ -41,4 +41,6 @@ void OrbitalCamera::update()
     } else {
         mouseDown = false;
     }
+
+    return mouseDown;
 }

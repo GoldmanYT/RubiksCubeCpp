@@ -29,6 +29,9 @@ public:
     // Метод для установки текста
     void setText(string text);
 
+    // Метод для установки позиции
+    void setOffset(float offsetX, float offsetY);
+
 protected:
     // Положение надписи
     LayoutConstraint constraint;

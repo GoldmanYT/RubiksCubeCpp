@@ -11,7 +11,7 @@ public:
     void recalculatePosition();
 
     // Метод для обновления положения камеры
-    void update();
+    bool update(bool isMouseButtonDown);
 
 private:
     // Угол поворота камеры по горизонтали
@@ -24,6 +24,7 @@ private:
     float radius;
 
     // Нажата ли ЛКМ
+    // Поле необходимо для сенсорных устройств
     bool mouseDown;
 
     // Чувствительность камеры по оси X

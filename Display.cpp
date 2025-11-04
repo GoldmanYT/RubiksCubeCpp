@@ -16,8 +16,11 @@ void display()
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
-    for (Button& button : buttons) {
-        button.draw(screenWidth, screenHeight);
+    for (int i = 0; i < buttons.size(); ++i) {
+        Button& button = buttons[i];
+        if (i <= BUTTON_TOGGLE || i > BUTTON_TOGGLE && rotationMode == MODE_BUTTONS) {
+            button.draw(screenWidth, screenHeight);
+        }
     }
     for (Label& label : labels) {
         label.draw(screenWidth, screenHeight);
@@ -70,7 +73,7 @@ void setHotkeys()
         keyboardCallbacks.push_back(KeyboardCallback { key + KEY_KP_1, key, selectRowIndex });
     }
 
-    auto rotate = [](int direction) { rubiksCubeModel.rotate(direction); };
+    auto rotate = [](int direction) { rubiksCubeModel.rotate(direction, true); };
 
     keyboardCallbacks.push_back(KeyboardCallback { KEY_SPACE, true, rotate });
     keyboardCallbacks.push_back(KeyboardCallback { KEY_LEFT_SHIFT, false, rotate });
@@ -99,6 +102,19 @@ void setHotkeys()
     keyboardCallbacks.push_back(KeyboardCallback { KEY_MINUS, 0, decreaseSize });
     keyboardCallbacks.push_back(KeyboardCallback { KEY_KP_SUBTRACT, 0, decreaseSize });
 
+    auto toggleButtons = [](int) {
+        rotationMode = (rotationMode == MODE_SWIPES) ? MODE_BUTTONS : MODE_SWIPES;
+        if (rotationMode == MODE_SWIPES) {
+            buttons[BUTTON_TOGGLE].setOffset(
+                DEFAULT_LAYOUT_OFFSET, DEFAULT_LAYOUT_OFFSET);
+            buttons[BUTTON_TOGGLE].setText(TEXT_HIDE);
+        } else {
+            buttons[BUTTON_TOGGLE].setOffset(
+                2 * DEFAULT_LAYOUT_OFFSET + DEFAULT_LAYOUT_WIDTH, DEFAULT_LAYOUT_OFFSET);
+            buttons[BUTTON_TOGGLE].setText(TEXT_SHOW);
+        }
+    };
+
     int i = 0;
     buttons[i] = Button(
         TOP_LEFT,
@@ -117,6 +133,14 @@ void setHotkeys()
         TOP_RIGHT,
         DEFAULT_LAYOUT_OFFSET, 2 * DEFAULT_LAYOUT_OFFSET + DEFAULT_LAYOUT_HEIGHT,
         "\xEE\x87\x98", 0, decreaseSize, true);
+
+    buttons[++i] = Button(
+        BOTTOM_LEFT,
+        DEFAULT_LAYOUT_HEIGHT, DEFAULT_LAYOUT_HEIGHT,
+        DEFAULT_LAYOUT_OFFSET, DEFAULT_LAYOUT_OFFSET,
+        TEXT_HIDE, 0, toggleButtons, true);
+
+    BUTTON_TOGGLE = i;
 
     buttons[++i] = Button(
         BOTTOM_RIGHT,

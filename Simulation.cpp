@@ -16,16 +16,41 @@ void simulation()
         }
     }
 
-    camera.update();
-    rubiksCubeModel.update(camera);
-
+    bool isMouseDown = IsMouseButtonDown(MOUSE_BUTTON_LEFT);
     bool isMousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
     Vector2 mousePos = GetMousePosition();
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
+    bool isPressed = false;
 
-    for (Button& button : buttons) {
-        button.update(isMousePressed, mousePos, screenWidth, screenHeight);
+    if (!isMouseDown) {
+        selectedElement = SELECTED_NOTHING;
+    }
+
+    if (selectedElement == SELECTED_BUTTON || selectedElement == SELECTED_NOTHING) {
+        for (int i = 0; i < buttons.size(); ++i) {
+            Button& button = buttons[i];
+            if (i <= BUTTON_TOGGLE || i > BUTTON_TOGGLE && rotationMode == MODE_BUTTONS) {
+                isPressed = button.update(isMousePressed, mousePos, screenWidth, screenHeight);
+                if (isPressed) {
+                    selectedElement = SELECTED_BUTTON;
+                }
+            }
+        }
+    }
+
+    if (selectedElement == SELECTED_STICKER || selectedElement == SELECTED_NOTHING) {
+        isPressed = rubiksCubeModel.update(camera, isMouseDown, mousePos);
+        if (isPressed) {
+            selectedElement = SELECTED_STICKER;
+        }
+    }
+
+    if (selectedElement == SELECTED_CAMERA || selectedElement == SELECTED_NOTHING) {
+        isPressed = camera.update(isMouseDown);
+        if (isPressed) {
+            selectedElement = SELECTED_CAMERA;
+        }
     }
 }
 

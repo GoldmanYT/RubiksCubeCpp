@@ -23,9 +23,18 @@ const int MAX_SIZE = 20;
 // Минимальный размер кубика Рубика
 const int MIN_SIZE = 2;
 
+// Выбранный элемент
+// Необходим для того, чтобы обновлять
+// только те элементы, которые выбраны
+SelectedElement selectedElement = SELECTED_NOTHING;
+
+// Выбранный режим вращения
+RotationMode rotationMode = MODE_SWIPES;
+
 // Логика выбора соседних сторон в зависимости от плоскости (XOY, YOZ, ZOX):
 // Стороны, которые меняются во время вращения
-// в порядке их смены (против часовой стрелки)
+// в порядке их смены (против часовой стрелки),
+// если смотреть по направлению координатной оси
 int ROTATION_SIDES[3][4] = {
     { STICKER_GREEN, STICKER_ORANGE, STICKER_BLUE, STICKER_RED },
     { STICKER_ORANGE, STICKER_WHITE, STICKER_RED, STICKER_YELLOW },
@@ -41,16 +50,6 @@ int ROTATION_SIDE[3][2] = {
     { STICKER_YELLOW, STICKER_WHITE },
     { STICKER_BLUE, STICKER_GREEN },
     { STICKER_ORANGE, STICKER_RED }
-};
-
-// Нормали для каждой из сторон
-Vector3 SIDE_NORMALS[SIDE_COUNT] = {
-    { 0.0f, 1.0f, 0.0f },
-    { 0.0f, 0.0f, 1.0f },
-    { 1.0f, 0.0f, 0.0f },
-    { 0.0f, -1.0f, 0.0f },
-    { 0.0f, 0.0f, -1.0f },
-    { -1.0f, 0.0f, 0.0f }
 };
 
 // Цвета, используемые для материалов
@@ -125,6 +124,9 @@ const int LABEL_MOVE_COUNT = 0;
 // Индекс надписи с состоянием кубика Рубика (собран/нет)
 const int LABEL_SOLVED = 1;
 
+// Индекс кнопки с "Глазом"
+int BUTTON_TOGGLE;
+
 // Текст в кодировке UTF-8 "Собран"
 char TEXT_SOLVED[] = "\xD0\xA1\xD0\xBE\xD0\xB1\xD1\x80\xD0\xB0\xD0\xBD";
 
@@ -139,6 +141,12 @@ char TEXT_VERTICAL_1[] = "\xD0\x92\xD0\xB5\xD1\x80\xD1\x82\xD0\xB8\xD0\xBA\xD0\x
 
 // Текст в кодировке UTF-8 "Вертикально 2"
 char TEXT_VERTICAL_2[] = "\xD0\x92\xD0\xB5\xD1\x80\xD1\x82\xD0\xB8\xD0\xBA\xD0\xB0\xD0\xBB\xD1\x8C\xD0\xBD\xD0\xBE\x20\x32";
+
+// Текст в кодировке UTF-8 для шрифта символов "Глаз"
+char TEXT_SHOW[] = "\xEE\x81\x92";
+
+// Текст в кодировке UTF-8 для шрифта символов "Зачёркнутый глаз"
+char TEXT_HIDE[] = "\xEE\xB4\x9A";
 
 void initData()
 {
