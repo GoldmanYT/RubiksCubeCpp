@@ -28,8 +28,8 @@ private:
     bool mouseDown;
 
     // Чувствительность камеры по оси X
-    const float SENSIVITY_X = 0.005f;
+    const float SENSITIVITY_X = 0.005f;
 
     // Чувствительность камеры по оси Y
-    const float SENSIVITY_Y = 0.005f;
+    const float SENSITIVITY_Y = 0.005f;
 };

@@ -40,7 +40,9 @@ void init()
 #ifdef PLATFORM_DESKTOP
     SetWindowState(FLAG_WINDOW_RESIZABLE);
 #endif
+#ifndef PLATFORM_DESKTOP
     rlSetClipPlanes(2 * sqrt(3.0), 4 * sqrt(3.0));
+#endif
 
     initData();
     setHotkeys();

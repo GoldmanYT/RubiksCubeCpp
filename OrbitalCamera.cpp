@@ -2,9 +2,9 @@
 
 OrbitalCamera::OrbitalCamera()
     : Camera {
-        { 0.0f, 0.0f, 0.0f },
-        { 0.0f, 0.0f, 0.0f },
-        { 0.0f, 1.0f, 0.0f },
+        Vector3Zeros,
+        Vector3Zeros,
+        Vector3UnitY,
         30.0f,
         CAMERA_PERSPECTIVE
     }
@@ -12,7 +12,6 @@ OrbitalCamera::OrbitalCamera()
     , angleY(PI / 4)
     , radius(3 * sqrt(3.0f))
     , mouseDown(false)
-
 {
     recalculatePosition();
 }
@@ -24,20 +23,27 @@ void OrbitalCamera::recalculatePosition()
         radius * cos(angleY),
         radius * sin(angleY) * sin(angleX)
     };
+
+    up = {
+        -cos(angleY) * cos(angleX),
+        sin(angleY),
+        -cos(angleY) * sin(angleX)
+    };
+    up = Vector3Normalize(up);
 }
 
 bool OrbitalCamera::update(bool isMouseButtonDown)
 {
     if (isMouseButtonDown) {
         Vector2 mouseDelta = mouseDown ? GetMouseDelta() : Vector2 { 0.0f, 0.0f };
-        bool direction = (long long)floor(angleY / acos(-1)) % 2 != 0;
+        bool direction = (long long)floor(angleY / PI) % 2 != 0;
         mouseDown = true;
 
-        angleX += mouseDelta.x * SENSIVITY_X * (direction ? -1.0f : 1.0f);
-        angleY -= mouseDelta.y * SENSIVITY_Y;
-        up.y = 1.0f - 2 * direction;
+        angleX += mouseDelta.x * SENSITIVITY_X * (direction ? -1.0f : 1.0f);
+        angleY -= mouseDelta.y * SENSITIVITY_Y;
 
         recalculatePosition();
+        mouseDown = true;
     } else {
         mouseDown = false;
     }
