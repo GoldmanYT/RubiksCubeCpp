@@ -568,12 +568,16 @@ bool RubiksCubeModel::update(Camera camera, bool isMouseDown, Vector2 mousePos)
     // Обновление замешивателя кубика Рубика
     scrambler.update(*this, selectedRow);
 
-    Ray viewRay = GetScreenToWorldRay(mousePos, camera);
-
     if (!isMouseDown || rotationMode == MODE_BUTTONS) {
         selectedSticker.deselect();
         return false;
     }
+
+    if (selectedElement != SELECTED_STICKER && selectedElement != SELECTED_NOTHING) {
+        return false;
+    }
+
+    Ray viewRay = GetScreenToWorldRay(mousePos, camera);
 
     if (selectedSticker.getSelected()) {
         RotationData rotationData = selectedSticker.getRotationData(viewRay);
@@ -590,7 +594,6 @@ bool RubiksCubeModel::update(Camera camera, bool isMouseDown, Vector2 mousePos)
     for (int side = 0; side < SIDE_COUNT; ++side) {
         for (int x = 0; x < size; ++x) {
             for (int y = 0; y < size; ++y) {
-                GraphicObjectData& sticker = stickers[side][x][y];
                 RayCollision collision = GetRayCollisionMesh(viewRay, stickerMesh, getStickerTransform(side, x, y, true));
 
                 if (collision.hit && Vector3DotProduct(collision.normal, viewRay.direction) < 0.0f && isMouseDown) {
@@ -600,5 +603,5 @@ bool RubiksCubeModel::update(Camera camera, bool isMouseDown, Vector2 mousePos)
         }
     }
 
-    return selectedSticker.getSelected() || selectedRow.isRotating();
+    return selectedSticker.getSelected() || selectedRow.isRotating() && !scrambler.isScrambling();
 }

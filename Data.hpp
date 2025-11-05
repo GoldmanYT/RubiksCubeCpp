@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 // #define PLATFORM_ANDROID
-#define PLATFORM_DESKTOP
+// #define PLATFORM_DESKTOP
 
 #include <array>
 #include <memory>

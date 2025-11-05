@@ -30,7 +30,7 @@ void simulation()
     if (selectedElement == SELECTED_BUTTON || selectedElement == SELECTED_NOTHING) {
         for (int i = 0; i < buttons.size(); ++i) {
             Button& button = buttons[i];
-            if (i <= BUTTON_TOGGLE || i > BUTTON_TOGGLE && rotationMode == MODE_BUTTONS) {
+            if (i <= BUTTON_TOGGLE || (i > BUTTON_TOGGLE && rotationMode == MODE_BUTTONS)) {
                 isPressed = button.update(isMousePressed, mousePos, screenWidth, screenHeight);
                 if (isPressed) {
                     selectedElement = SELECTED_BUTTON;
@@ -39,11 +39,9 @@ void simulation()
         }
     }
 
-    if (selectedElement == SELECTED_STICKER || selectedElement == SELECTED_NOTHING) {
-        isPressed = rubiksCubeModel.update(camera, isMouseDown, mousePos);
-        if (isPressed) {
-            selectedElement = SELECTED_STICKER;
-        }
+    isPressed = rubiksCubeModel.update(camera, isMouseDown, mousePos);
+    if (isPressed) {
+        selectedElement = SELECTED_STICKER;
     }
 
     if (selectedElement == SELECTED_CAMERA || selectedElement == SELECTED_NOTHING) {

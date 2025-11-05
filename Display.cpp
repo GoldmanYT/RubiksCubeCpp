@@ -18,7 +18,7 @@ void display()
 
     for (int i = 0; i < buttons.size(); ++i) {
         Button& button = buttons[i];
-        if (i <= BUTTON_TOGGLE || i > BUTTON_TOGGLE && rotationMode == MODE_BUTTONS) {
+        if (i <= BUTTON_TOGGLE || (i > BUTTON_TOGGLE && rotationMode == MODE_BUTTONS)) {
             button.draw(screenWidth, screenHeight);
         }
     }
@@ -40,7 +40,7 @@ void init()
 #ifdef PLATFORM_DESKTOP
     SetWindowState(FLAG_WINDOW_RESIZABLE);
 #endif
-    rlSetClipPlanes(sqrt(3.0), 6.0);
+    rlSetClipPlanes(2 * sqrt(3.0), 4 * sqrt(3.0));
 
     initData();
     setHotkeys();
