@@ -51,8 +51,3 @@ void simulation()
         }
     }
 }
-
-void logKeyboardPress(int key)
-{
-    TraceLog(LOG_INFO, "Pressed key: %i", key);
-}

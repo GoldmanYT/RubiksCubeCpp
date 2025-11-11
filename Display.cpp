@@ -58,10 +58,6 @@ void mainloop()
 
 void setHotkeys()
 {
-    for (int key = 0; key <= 348; ++key) {
-        keyboardCallbacks.push_back(KeyboardCallback { key, key, logKeyboardPress });
-    }
-
     auto selectPlane = [](int plane) { rubiksCubeModel.setPlane(CubePlane(plane)); };
 
     keyboardCallbacks.push_back(KeyboardCallback { KEY_W, ZOX, selectPlane });
