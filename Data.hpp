@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-// #define PLATFORM_ANDROID
-// #define PLATFORM_DESKTOP
+#define PLATFORM_DESKTOP
 
 #include <array>
 #include <memory>
@@ -37,10 +36,10 @@ const int PLANE_COUNT = SIDE_COUNT / 2;
 
 // Перечисление выбранного элемента
 enum SelectedElement {
-    SELECTED_NOTHING,
-    SELECTED_BUTTON,
-    SELECTED_CAMERA,
-    SELECTED_STICKER
+	SELECTED_NOTHING,
+	SELECTED_BUTTON,
+	SELECTED_CAMERA,
+	SELECTED_STICKER
 };
 
 // Выбранный элемент
@@ -50,8 +49,8 @@ extern SelectedElement selectedElement;
 
 // Режимы вращения кубика Рубика
 enum RotationMode {
-    MODE_SWIPES,
-    MODE_BUTTONS
+	MODE_SWIPES,
+	MODE_BUTTONS
 };
 
 // Выбранный режим вращения
@@ -59,19 +58,19 @@ extern RotationMode rotationMode;
 
 // Перечисление всех плоскостей куба
 enum CubePlane {
-    ZOX,
-    XOY,
-    YOZ
+	ZOX,
+	XOY,
+	YOZ
 };
 
 // Перечисление всех цветок кубика Рубика
 enum StickerColor {
-    STICKER_WHITE,
-    STICKER_GREEN,
-    STICKER_RED,
-    STICKER_YELLOW,
-    STICKER_BLUE,
-    STICKER_ORANGE
+	STICKER_WHITE,
+	STICKER_GREEN,
+	STICKER_RED,
+	STICKER_YELLOW,
+	STICKER_BLUE,
+	STICKER_ORANGE
 };
 
 // Логика выбора соседних сторон в зависимости от плоскости (XOY, YOZ, ZOX):

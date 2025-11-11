@@ -2,51 +2,43 @@
 
 OrbitalCamera::OrbitalCamera()
     : Camera {
-        Vector3Zeros,
+        Vector3UnitX * (3 * sqrt(3.0f)),
         Vector3Zeros,
         Vector3UnitY,
         30.0f,
         CAMERA_PERSPECTIVE
     }
-    , angleX(PI / 4)
-    , angleY(PI / 4)
-    , radius(3 * sqrt(3.0f))
     , mouseDown(false)
 {
-    recalculatePosition();
+    Vector2 initialRotation = { PI / 4, PI / 4 };
+
+    rotateByAngle(initialRotation);
 }
 
-void OrbitalCamera::recalculatePosition()
-{
-    position = {
-        radius * sin(angleY) * cos(angleX),
-        radius * cos(angleY),
-        radius * sin(angleY) * sin(angleX)
-    };
 
-    up = {
-        -cos(angleY) * cos(angleX),
-        sin(angleY),
-        -cos(angleY) * sin(angleX)
-    };
-    up = Vector3Normalize(up);
-}
 
 bool OrbitalCamera::update(bool isMouseButtonDown)
 {
     if (isMouseButtonDown) {
         Vector2 mouseDelta = mouseDown ? GetMouseDelta() : Vector2 { 0.0f, 0.0f };
-        bool direction = (long long)floor(angleY / PI) % 2 != 0;
-        mouseDown = true;
+        mouseDelta *= SENSITIVITY;
 
-        angleX += mouseDelta.x * SENSITIVITY_X * (direction ? -1.0f : 1.0f);
-        angleY -= mouseDelta.y * SENSITIVITY_Y;
+        rotateByAngle(mouseDelta);
 
-        recalculatePosition();
         mouseDown = true;
     } else {
         mouseDown = false;
     }
 
     return mouseDown;
+}
+
+void OrbitalCamera::rotateByAngle(Vector2 rotation)
+{
+    position = Vector3RotateByAxisAngle(position, up, -rotation.x);
+
+    Vector3 right = Vector3CrossProduct(position, up);
+
+    position = Vector3RotateByAxisAngle(position, right, rotation.y);
+    up = Vector3RotateByAxisAngle(up, right, rotation.y);
 }

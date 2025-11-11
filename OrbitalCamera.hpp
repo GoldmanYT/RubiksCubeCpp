@@ -7,29 +7,16 @@ public:
     // Конструктор по умолчанию
     OrbitalCamera();
 
-    // Метод для пересчёта позиции
-    void recalculatePosition();
-
     // Метод для обновления положения камеры
     bool update(bool isMouseButtonDown);
 
+    void rotateByAngle(Vector2 rotation);
+
 private:
-    // Угол поворота камеры по горизонтали
-    float angleX;
-
-    // Угол поворота камеры по вертикали
-    float angleY;
-
-    // Расстояние до точки (0, 0, 0)
-    float radius;
-
     // Нажата ли ЛКМ
     // Поле необходимо для сенсорных устройств
     bool mouseDown;
 
-    // Чувствительность камеры по оси X
-    const float SENSITIVITY_X = 0.005f;
-
-    // Чувствительность камеры по оси Y
-    const float SENSITIVITY_Y = 0.005f;
+    // Чувствительность камеры
+    const float SENSITIVITY = 0.005f;
 };
