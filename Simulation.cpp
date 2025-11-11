@@ -11,8 +11,19 @@ OrbitalCamera camera;
 void simulation()
 {
     for (KeyboardCallback& callback : keyboardCallbacks) {
-        if (callback.handler != nullptr && IsKeyPressed(callback.key)) {
-            callback.handler(callback.param);
+        if (callback.handler != nullptr) {
+            switch (callback.type) {
+            case CALLBACK_TYPE_PRESS:
+                if (IsKeyPressed(callback.key)) {
+                    callback.handler(callback.param);
+                }
+                break;
+            case CALLBACK_TYPE_DOWN:
+                if (IsKeyDown(callback.key)) {
+                    callback.handler(callback.param);
+                }
+                break;
+            }
         }
     }
 

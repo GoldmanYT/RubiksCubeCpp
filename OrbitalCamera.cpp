@@ -2,7 +2,7 @@
 
 OrbitalCamera::OrbitalCamera()
     : Camera {
-        Vector3UnitX * (3 * sqrt(3.0f)),
+        Vector3UnitX * 6.0f,
         Vector3Zeros,
         Vector3UnitY,
         30.0f,
@@ -14,8 +14,6 @@ OrbitalCamera::OrbitalCamera()
 
     rotateByAngle(initialRotation);
 }
-
-
 
 bool OrbitalCamera::update(bool isMouseButtonDown)
 {

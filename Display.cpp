@@ -41,7 +41,7 @@ void init()
     SetWindowState(FLAG_WINDOW_RESIZABLE);
 #endif
 #ifndef PLATFORM_DESKTOP
-    rlSetClipPlanes(2 * sqrt(3.0), 4 * sqrt(3.0));
+    rlSetClipPlanes(4.5, 7.0);
 #endif
 
     initData();
@@ -60,45 +60,78 @@ void setHotkeys()
 {
     auto selectPlane = [](int plane) { rubiksCubeModel.setPlane(CubePlane(plane)); };
 
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_W, ZOX, selectPlane });
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_D, XOY, selectPlane });
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_A, YOZ, selectPlane });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_W, ZOX, selectPlane });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_D, XOY, selectPlane });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_A, YOZ, selectPlane });
 
     auto selectRowIndex = [](int rowIndex) { rubiksCubeModel.setRowIndex(rowIndex); };
 
     for (int key = 0; key < 9; ++key) {
-        keyboardCallbacks.push_back(KeyboardCallback { key + KEY_ONE, key, selectRowIndex });
-        keyboardCallbacks.push_back(KeyboardCallback { key + KEY_KP_1, key, selectRowIndex });
+        keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, key + KEY_ONE, key, selectRowIndex });
+        keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, key + KEY_KP_1, key, selectRowIndex });
     }
 
     auto rotate = [](int direction) { rubiksCubeModel.rotate(direction, true); };
 
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_SPACE, true, rotate });
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_LEFT_SHIFT, false, rotate });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_SPACE, true, rotate });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_LEFT_SHIFT, false, rotate });
 
     auto nextRowIndex = [](int) { rubiksCubeModel.nextRowIndex(); };
     auto previousRowIndex = [](int) { rubiksCubeModel.previousRowIndex(); };
 
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_UP, 0, nextRowIndex });
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_DOWN, 0, previousRowIndex });
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_RIGHT, 0, nextRowIndex });
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_LEFT, 0, previousRowIndex });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_UP, 0, nextRowIndex });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_DOWN, 0, previousRowIndex });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_RIGHT, 0, nextRowIndex });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_LEFT, 0, previousRowIndex });
 
     auto scramble = [](int) { rubiksCubeModel.scramble(); };
 
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_BACKSPACE, 0, scramble });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_BACKSPACE, 0, scramble });
 
     auto solve = [](int) { rubiksCubeModel.solve(); };
 
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_ENTER, 0, solve });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_ENTER, 0, solve });
 
     auto increaseSize = [](int) { rubiksCubeModel.increaseSize(); };
     auto decreaseSize = [](int) { rubiksCubeModel.decreaseSize(); };
 
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_EQUAL, 0, increaseSize });
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_KP_ADD, 0, increaseSize });
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_MINUS, 0, decreaseSize });
-    keyboardCallbacks.push_back(KeyboardCallback { KEY_KP_SUBTRACT, 0, decreaseSize });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_EQUAL, 0, increaseSize });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_KP_ADD, 0, increaseSize });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_MINUS, 0, decreaseSize });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_KP_SUBTRACT, 0, decreaseSize });
+
+    enum CameraRotationDirection {
+        LEFT,
+        RIGHT,
+        DOWN,
+        UP
+    };
+
+    auto cameraRotate = [](int rotationDirection) {
+        float frameTime = GetFrameTime();
+        float amount = frameTime * CAMERA_ROTATION_SPEED;
+        Vector2 direction = Vector2Zeros;
+        switch (rotationDirection) {
+        case LEFT:
+            direction = { -1.0f, 0.0f };
+            break;
+        case RIGHT:
+            direction = { 1.0f, 0.0f };
+            break;
+        case DOWN:
+            direction = { 0.0f, 1.0f };
+            break;
+        case UP:
+            direction = { 0.0f, -1.0f };
+            break;
+        }
+        camera.rotateByAngle(direction * amount);
+    };
+
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_DOWN, KEY_J, LEFT, cameraRotate });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_DOWN, KEY_L, RIGHT, cameraRotate });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_DOWN, KEY_K, DOWN, cameraRotate });
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_DOWN, KEY_I, UP, cameraRotate });
 
     auto toggleButtons = [](int) {
         rotationMode = (rotationMode == MODE_SWIPES) ? MODE_BUTTONS : MODE_SWIPES;
@@ -112,6 +145,8 @@ void setHotkeys()
             buttons[BUTTON_TOGGLE].setText(TEXT_SHOW);
         }
     };
+
+    keyboardCallbacks.push_back(KeyboardCallback { CALLBACK_TYPE_PRESS, KEY_TAB, 0, toggleButtons });
 
     int i = 0;
     buttons[i] = Button(

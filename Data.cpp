@@ -31,6 +31,9 @@ SelectedElement selectedElement = SELECTED_NOTHING;
 // Выбранный режим вращения
 RotationMode rotationMode = MODE_SWIPES;
 
+// Скорость вращения камеры
+extern const float CAMERA_ROTATION_SPEED = PI;
+
 // Логика выбора соседних сторон в зависимости от плоскости (XOY, YOZ, ZOX):
 // Стороны, которые меняются во время вращения
 // в порядке их смены (против часовой стрелки),

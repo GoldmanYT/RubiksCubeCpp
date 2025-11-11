@@ -603,5 +603,5 @@ bool RubiksCubeModel::update(Camera camera, bool isMouseDown, Vector2 mousePos)
         }
     }
 
-    return selectedSticker.getSelected() || selectedRow.isRotating() && !scrambler.isScrambling();
+    return selectedSticker.getSelected() || (selectedRow.isRotating() && !scrambler.isScrambling());
 }

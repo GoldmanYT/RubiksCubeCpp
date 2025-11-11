@@ -12,7 +12,13 @@ extern array<Label, LABEL_COUNT> labels;
 
 extern OrbitalCamera camera;
 
+enum KeyboardCallbackType {
+    CALLBACK_TYPE_PRESS,
+    CALLBACK_TYPE_DOWN
+};
+
 struct KeyboardCallback {
+    KeyboardCallbackType type;
     int key;
     int param;
     void (*handler)(int);
@@ -21,4 +27,3 @@ struct KeyboardCallback {
 extern vector<KeyboardCallback> keyboardCallbacks;
 
 void simulation();
-void logKeyboardPress(int key);
