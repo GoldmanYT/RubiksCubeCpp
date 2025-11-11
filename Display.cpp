@@ -43,8 +43,10 @@ void init()
 #ifndef PLATFORM_DESKTOP
     rlSetClipPlanes(4.5, 7.0);
 #endif
+#ifndef PLATFORM_ANDROID
     Image icon = LoadImage("assets/images/icon.png");
     SetWindowIcon(icon);
+#endif
 
     initData();
     setHotkeys();
