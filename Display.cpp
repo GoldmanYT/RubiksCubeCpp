@@ -43,6 +43,8 @@ void init()
 #ifndef PLATFORM_DESKTOP
     rlSetClipPlanes(4.5, 7.0);
 #endif
+    Image icon = LoadImage("assets/images/icon.png");
+    SetWindowIcon(icon);
 
     initData();
     setHotkeys();
